@@ -14,15 +14,26 @@ let objecttimer = 0;
 
 //objects
 let titan = {
-    x : 0,
-    y : -20
+    sx : 130,
+    sy : 290,
+    mx : 50,
+    my : 130,
+    lx : 0,
+    ly : -10,
 };
 
-let obj_para = {
-    x : 800,
-    y : 500,
+let soba_para = {
+    x : 400,
+    y : 290,
     vx : 10,
     vy : 10,
+};
+
+let rock_para = {
+    x : 300,
+    y : 320,
+    vx : 10,
+    vy : 10
 };
 
 // load images
@@ -63,11 +74,11 @@ function mainGame(){
     background(100, 150, 255);
     //background(obj);
     image(gnd, 0, 0);
-    image(negisoba, 25, 25);
-    image(rock, 100, 100);
-    //image(s_titan, titan.x, titan.y);
-    //image(m_titan, titan.x, titan.y);
-    image(l_titan, titan.x, titan.y)
+    image(negisoba, soba_para.x, soba_para.y);
+    image(rock, rock_para.x, rock_para.y);
+    image(s_titan, titan.sx, titan.sy);
+    image(m_titan, titan.mx, titan.my);
+    image(l_titan, titan.lx, titan.ly)
 }
 
 function mousePressed(){
