@@ -1,27 +1,39 @@
 //flags
 let gamestate;
+let level;
 
 //images
 let obj;
 let gnd;
-let s_titan;
-let m_titan;
-let l_titan;
 let negisoba;
+let rock;
 
 //timers
 let objecttimer = 0;
 
 //objects
-let titan = {
-    sx : 130,
-    sy : 290,
-    mx : 50,
-    my : 130,
-    lx : 0,
-    ly : -10,
-    level : 0,
-    hitx : 0
+let s_titan = {
+    x : 130,
+    y : 290,
+    img : 0,
+    imgx : 120,
+    imgy : 130,
+};
+
+let m_titan = {
+    x : 50,
+    y : 130,
+    img : 0,
+    imgx : 250,
+    imgy : 300,
+};
+
+let l_titan = {
+    x : 0,
+    y : -10,
+    img : 0,
+    imgx : 350,
+    imgy : 430,
 };
 
 let soba_para = {
@@ -54,11 +66,12 @@ function setup(){
     gnd.loadPixels();
     negisoba = obj.get(30, 10, 130, 130);
     rock = obj.get(240, 30, 130, 110);
-    s_titan = obj.get(10, 370, 120, 130);
-    m_titan = obj.get(160, 180, 250, 300);
-    l_titan = obj.get(430, 40, 350, 430);
+    s_titan.img = obj.get(10, 370, 120, 130);
+    m_titan.img = obj.get(160, 180, 250, 300);
+    l_titan.img = obj.get(430, 40, 350, 430);
 
     gamestate = 1;
+    level = 0;
 
 }
 
@@ -84,19 +97,19 @@ function mainGame(){
     //image(rock, rock_para.x, rock_para.y);
 
     //titan size
-    if(titan.level == 0){
-	image(s_titan, titan.sx, titan.sy);
-	titan.hitx = titan.sx;
+    if(level == 0){
+	image(s_titan.img, s_titan.x, s_titan.y);
+
     }
 
-    else if(titan.level == 1){
-	image(m_titan, titan.mx, titan.my);
-	titan.hitx = titan.mx;
+    else if(level == 1){
+	image(m_titan.img, m_titan.x, m_titan.y);
+
     }
 
     else{
-	image(l_titan, titan.lx, titan.ly)
-	titan.hitx = titan.lx;
+	image(l_titan.img, l_titan.x, l_titan.y)
+
     }
 
     //move objects
@@ -107,7 +120,7 @@ function mainGame(){
     //if(rock_para.x == 0) rock_para.x = 800;
 
     //hit
-    if(titan.sx + 50 >= soba_para.x) gamestate = 3;
+    if(s_titan.x + 50 >= soba_para.x) gamestate = 3;
 }
 
 function gameOver(){
@@ -117,4 +130,19 @@ function gameOver(){
 
 function mousePressed(){
 
+}
+
+function keyPressed() {
+    console.log(keyCode);
+  if (keyCode === ENTER) {
+      s_titan.y = 200;
+  }
+
+    return false;
+    
+}
+
+function keyReleased() {
+    s_titan.y = 300;
+  
 }
