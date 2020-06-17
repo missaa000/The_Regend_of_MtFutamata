@@ -2,8 +2,8 @@
 let gamestate;
 let point;
 let level;
-let sobai;
-let rocki;
+let soba_i;
+let rock_i;
 
 //images
 let obj;
@@ -15,13 +15,15 @@ let rock;
 let objecttimer = 0;
 
 //objects
-let soba_arr = [800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200];
+let soba_arr = [800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 1000];
+let rock_arr = [1000, 900, 1000, 1300, 1500, 1000, 1400, 1200, 1000, 1300, 1000, 1400, 1200, 1000, 1300, 1000]
 let s_titan = {
     x : 130,
     y : 290,
     img : 0,
     imgx : 120,
     imgy : 130,
+    p : 100,
 };
 
 let m_titan = {
@@ -30,6 +32,7 @@ let m_titan = {
     img : 0,
     imgx : 250,
     imgy : 300,
+    p : 120,
 };
 
 let l_titan = {
@@ -38,6 +41,7 @@ let l_titan = {
     img : 0,
     imgx : 350,
     imgy : 430,
+    p : 150,
 };
 
 let soba_para = {
@@ -75,7 +79,8 @@ function setup(){
     
     gamestate = 1;
     point = 0;
-    sobai = 0;
+    soba_i = 0;
+    rock_i = 0;
 
 }
 
@@ -93,6 +98,14 @@ function draw(){
     if(gamestate == 3){
 	happyEnd();
     }
+
+    if(gamestate == 4){
+	trueEnd();
+    }
+
+    if(gamestate == 5){
+	badEnd();
+    }
 }
 
 
@@ -100,43 +113,53 @@ function draw(){
 function mainGame(){
     background(100, 150, 255);
     image(gnd, 0, 0);
-    image(negisoba, soba_arr[sobai], soba_para.y);
-    image(rock, rock_para.x, rock_para.y);
+    image(negisoba, soba_arr[soba_i], soba_para.y);
+    image(rock, rock_arr[rock_i], rock_para.y);
 
     //titan size
-    if(point < 50){
+    if(point < s_titan.p){
 	image(s_titan.img, s_titan.x, s_titan.y);
-	if(soba_arr[sobai] == 200 && soba_para.y <= s_titan.y){
+	if(soba_arr[soba_i] <= 200 && soba_para.y <= s_titan.y){
 	    point += 10;
-	    sobai++;
+	    soba_i++;
 	}
+
+	if(soba_i >= 15) gamestate = 5;
 	
     }
 
-    else if(point < 100){
+    else if(point < m_titan.p){
 	image(m_titan.img, m_titan.x, m_titan.y);
-	if(soba_para.x == 200 && soba_para.y <= (m_titan.y + m_titan.imgy)){
+	if(soba_arr[soba_i] <= 200 && soba_para.y <= (m_titan.y + m_titan.imgy)){
 	    point += 10;
-	    soba_para.x = 800;
+	    soba_i++;
 	}
+	
+	if(soba_i >= 15) gamestate = 4;
+	
     }
     
     else{
 	image(l_titan.img, l_titan.x, l_titan.y);
-	if(soba_para.x == 200 && soba_para.y <= (l_titan.y + l_titan.imgy)){
+	if(soba_arr[soba_i] <= 200 && soba_para.y <= (l_titan.y + l_titan.imgy)){
 	    point += 10;
-	    soba_para.x = 800;
+	    soba_i++;
 	}
-
+	
 	if(point >= 150) gamestate = 3;
+	else if(soba_i >= 15) gamestate = 4;
     }
 
     //move objects
-    soba_arr[sobai] -= 10;
-    rock_para.x -= 10;
+    soba_arr[soba_i] -= 10;
+    rock_arr[rock_i] -= 10;
 
-    if(soba_arr[sobai] < 0) sobai++;
-    //if(rock_para.x == 0) rock_para.x = 800;
+    if(soba_arr[soba_i] < -30) soba_i++;
+    if(rock_arr[rock_i] < -30) rock_i++;
+
+    if(rock_arr[rock_i] == 200 && !mouseIsPressed){
+	gamestate = 2;
+    }
 
 }
 
@@ -146,33 +169,41 @@ function gameOver(){
 }
 
 function happyEnd(){
-    background(10, 10, 10);
+    background(300, 100, 100);
+}
+
+function trueEnd(){
+    background(100, 100, 300);
+}
+
+function badEnd(){
+    background(0, 0, 0);
 }
 
 function mousePressed(){
-    if(point < 50){
+    if(point < s_titan.p){
 	s_titan.y -= 150;
     }
     
-    if(point < 100){
+    if(point < m_titan.p){
 	m_titan.y -= 150;
     }
     
-    if(point < 150){
-	    l_titan.y -= 150;
+    if(point < l_titan.p){
+	l_titan.y -= 150;
     }
 }
 
 function mouseReleased(){
-  if(point < 50){
+  if(point < s_titan.p){
 	s_titan.y += 150;
     }
 
-    if(point < 100){
+    if(point < m_titan.p){
 	m_titan.y += 150;
     }
     
-    if(point < 150){
+    if(point < l_titan.p){
 	l_titan.y += 150;
     }
 }
