@@ -1,6 +1,7 @@
 //flags
 let gamestate;
 let level;
+let point;
 
 //images
 let obj;
@@ -37,7 +38,7 @@ let l_titan = {
 };
 
 let soba_para = {
-    x : 800,
+     x : 800,
     y : 290,
     vx : 10,
     vy : 10,
@@ -49,6 +50,11 @@ let rock_para = {
     vx : 10,
     vy : 10
 };
+
+//current status
+let titanx;
+let titany;
+let nowimg;
 
 // load images
 function preload(){
@@ -65,13 +71,14 @@ function setup(){
     obj.loadPixels();
     gnd.loadPixels();
     negisoba = obj.get(30, 10, 130, 130);
-    rock = obj.get(240, 30, 130, 110);
+    rock = obj.get(240, 30, 130, 110);    
     s_titan.img = obj.get(10, 370, s_titan.imgx, s_titan.imgy);
     m_titan.img = obj.get(160, 180, m_titan.imgx, m_titan.imgy);
     l_titan.img = obj.get(430, 40, l_titan.imgx, l_titan.imgy);
 
     gamestate = 1;
     level = 0;
+    point = 0;
 
 }
 
@@ -113,30 +120,36 @@ function mainGame(){
     //image(rock, rock_para.x, rock_para.y);
 
     //titan size
-    if(level == 0){
-	image(s_titan.img, s_titan.x, s_titan.y);
+    if(point < 10){
+	titanx = s_titan.x;
+	titany = s_titan.y;
+	nowimg = s_titan.img;
 
     }
 
-    else if(level == 1){
-	image(m_titan.img, m_titan.x, m_titan.y);
+    else if(point < 20){
+	titanx = m_titan.x;
 
     }
 
     else{
-	image(l_titan.img, l_titan.x, l_titan.y)
+	image(l_titan.img, l_titan.x, l_titan.y);
 
     }
 
+    image(nowimg, titanx, titany);
+
     //move objects
     soba_para.x -= 10;
-    rock_para.x -= 10;
+    //rock_para.x -= 10;
 
     if(soba_para.x == 0) soba_para.x = 800;
     //if(rock_para.x == 0) rock_para.x = 800;
 
     //hit
-    if(s_titan.x + 50 >= soba_para.x) gamestate = 2;
+    if(titanx >= soba_para.x) point += 10;
+    //console.log(point);
+  //  if(s_titan.x + 50 >= rock.x) gamestate = 2;
 }
 
 function gameOver(){
@@ -145,20 +158,24 @@ function gameOver(){
 }
 
 function mousePressed(){
-
+    titany -= 150;
 }
 
-function keyPressed() {
-    console.log(keyCode);
-  if (keyCode === ENTER) {
-      s_titan.y = 200;
-  }
+function mouseReleased(){
+    titany += 150;
+}
 
-    return false;
+// function keyPressed() {
+//     console.log(keyCode);
+//   if (keyCode === ENTER) {
+//       s_titan.y = 200;
+//   }
+
+//     return false;
     
-}
+// }
 
-function keyReleased() {
-    s_titan.y = 300;
+// function keyReleased() {
+//      s_titan.y = 300;
   
-}
+// }
