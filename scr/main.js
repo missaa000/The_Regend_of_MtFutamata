@@ -66,9 +66,9 @@ function setup(){
     gnd.loadPixels();
     negisoba = obj.get(30, 10, 130, 130);
     rock = obj.get(240, 30, 130, 110);
-    s_titan.img = obj.get(10, 370, 120, 130);
-    m_titan.img = obj.get(160, 180, 250, 300);
-    l_titan.img = obj.get(430, 40, 350, 430);
+    s_titan.img = obj.get(10, 370, s_titan.imgx, s_titan.imgy);
+    m_titan.img = obj.get(160, 180, m_titan.imgx, m_titan.imgy);
+    l_titan.img = obj.get(430, 40, l_titan.imgx, l_titan.imgy);
 
     gamestate = 1;
     level = 0;
@@ -78,12 +78,28 @@ function setup(){
 
 //main
 function draw(){
+    if(gamestate == 0){
+	gameOpening();
+    }
+    
     if(gamestate == 1){
 	mainGame();
     }
 
-    if(gamestate == 3){
+    if(gamestate == 2){
 	gameOver();
+    }
+
+    if(gamestate == 3){
+	gameEnd1();
+    }
+
+    if(gamestate == 4){
+	gameEnd2();
+    }
+
+    if(gamestate == 5){
+	gameEnd3();
     }
 }
 
@@ -120,7 +136,7 @@ function mainGame(){
     //if(rock_para.x == 0) rock_para.x = 800;
 
     //hit
-    if(s_titan.x + 50 >= soba_para.x) gamestate = 3;
+    if(s_titan.x + 50 >= soba_para.x) gamestate = 2;
 }
 
 function gameOver(){
