@@ -1,7 +1,7 @@
 //flags
 let gamestate;
-let level;
 let point;
+let level;
 
 //images
 let obj;
@@ -13,6 +13,9 @@ let rock;
 let objecttimer = 0;
 
 //objects
+let nowImg;
+let titanx;
+let titany;
 let s_titan = {
     x : 130,
     y : 290,
@@ -38,11 +41,11 @@ let l_titan = {
 };
 
 let soba_para = {
-     x : 800,
+    x : 800,
     y : 290,
     vx : 10,
     vy : 10,
-};
+    };
 
 let rock_para = {
     x : 800,
@@ -50,11 +53,6 @@ let rock_para = {
     vx : 10,
     vy : 10
 };
-
-//current status
-let titanx;
-let titany;
-let nowimg;
 
 // load images
 function preload(){
@@ -71,13 +69,12 @@ function setup(){
     obj.loadPixels();
     gnd.loadPixels();
     negisoba = obj.get(30, 10, 130, 130);
-    rock = obj.get(240, 30, 130, 110);    
-    s_titan.img = obj.get(10, 370, s_titan.imgx, s_titan.imgy);
-    m_titan.img = obj.get(160, 180, m_titan.imgx, m_titan.imgy);
-    l_titan.img = obj.get(430, 40, l_titan.imgx, l_titan.imgy);
-
+    rock = obj.get(240, 30, 130, 110);
+    s_titan.img = obj.get(10, 370, 120, 130);
+    m_titan.img = obj.get(160, 180, 250, 300);
+    l_titan.img = obj.get(430, 40, 350, 430);
+    
     gamestate = 1;
-    level = 0;
     point = 0;
 
 }
@@ -85,10 +82,6 @@ function setup(){
 
 //main
 function draw(){
-    if(gamestate == 0){
-	gameOpening();
-    }
-    
     if(gamestate == 1){
 	mainGame();
     }
@@ -98,15 +91,7 @@ function draw(){
     }
 
     if(gamestate == 3){
-	gameEnd1();
-    }
-
-    if(gamestate == 4){
-	gameEnd2();
-    }
-
-    if(gamestate == 5){
-	gameEnd3();
+	happyEnd();
     }
 }
 
@@ -120,36 +105,39 @@ function mainGame(){
     //image(rock, rock_para.x, rock_para.y);
 
     //titan size
-    if(point < 10){
-	titanx = s_titan.x;
-	titany = s_titan.y;
-	nowimg = s_titan.img;
-
+    if(point < 50){
+	image(s_titan.img, s_titan.x, s_titan.y);
+	if(soba_para.x == 200 && soba_para.y <= s_titan.y){
+	    point += 10;
+	    soba_para.x = 800;
+	}
     }
 
-    else if(point < 20){
-	titanx = m_titan.x;
-
+    else if(point < 100){
+	image(m_titan.img, m_titan.x, m_titan.y);
+	if(soba_para.x == 200 && soba_para.y <= (m_titan.y + m_titan.imgy)){
+	    point += 10;
+	    soba_para.x = 800;
+	}
     }
-
+    
     else{
 	image(l_titan.img, l_titan.x, l_titan.y);
+	if(soba_para.x == 200 && soba_para.y <= (l_titan.y + l_titan.imgy)){
+	    point += 10;
+	    soba_para.x = 800;
+	}
 
+	if(point >= 150) gamestate = 3;
     }
-
-    image(nowimg, titanx, titany);
 
     //move objects
     soba_para.x -= 10;
-    //rock_para.x -= 10;
+    rock_para.x -= 10;
 
-    if(soba_para.x == 0) soba_para.x = 800;
+    if(soba_para.x < 0) soba_para.x = 800;
     //if(rock_para.x == 0) rock_para.x = 800;
 
-    //hit
-    if(titanx >= soba_para.x) point += 10;
-    //console.log(point);
-  //  if(s_titan.x + 50 >= rock.x) gamestate = 2;
 }
 
 function gameOver(){
@@ -157,25 +145,45 @@ function gameOver(){
 
 }
 
+function happyEnd(){
+    background(10, 10, 10);
+}
+
 function mousePressed(){
-    titany -= 150;
+
 }
 
-function mouseReleased(){
-    titany += 150;
-}
+function keyPressed() {
+    console.log(keyCode);
+    if (keyCode === ENTER) {
+	if(point < 50){
+	    s_titan.y -= 150;
+	}
+	
+	if(point < 100){
+	    m_titan.y -= 150;
+	}
 
-// function keyPressed() {
-//     console.log(keyCode);
-//   if (keyCode === ENTER) {
-//       s_titan.y = 200;
-//   }
-
-//     return false;
+	if(point < 150){
+	    l_titan.y -= 150;
+	}
+  }
     
-// }
+    return false;
+    
+}
 
-// function keyReleased() {
-//      s_titan.y = 300;
+function keyReleased() {
+    if(point < 50){
+	s_titan.y += 150;
+    }
+
+    if(point < 100){
+	m_titan.y += 150;
+    }
+    
+    if(point < 150){
+	l_titan.y += 150;
+    }
   
-// }
+}
