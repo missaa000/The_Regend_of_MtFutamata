@@ -2,6 +2,8 @@
 let gamestate;
 let point;
 let level;
+let sobai;
+let rocki;
 
 //images
 let obj;
@@ -13,9 +15,7 @@ let rock;
 let objecttimer = 0;
 
 //objects
-let nowImg;
-let titanx;
-let titany;
+let soba_arr = [800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200];
 let s_titan = {
     x : 130,
     y : 290,
@@ -41,7 +41,6 @@ let l_titan = {
 };
 
 let soba_para = {
-    x : 800,
     y : 290,
     vx : 10,
     vy : 10,
@@ -76,6 +75,7 @@ function setup(){
     
     gamestate = 1;
     point = 0;
+    sobai = 0;
 
 }
 
@@ -99,18 +99,18 @@ function draw(){
 //mainGame
 function mainGame(){
     background(100, 150, 255);
-    //background(obj);
     image(gnd, 0, 0);
-    image(negisoba, soba_para.x, soba_para.y);
-    //image(rock, rock_para.x, rock_para.y);
+    image(negisoba, soba_arr[sobai], soba_para.y);
+    image(rock, rock_para.x, rock_para.y);
 
     //titan size
     if(point < 50){
 	image(s_titan.img, s_titan.x, s_titan.y);
-	if(soba_para.x == 200 && soba_para.y <= s_titan.y){
+	if(soba_arr[sobai] == 200 && soba_para.y <= s_titan.y){
 	    point += 10;
-	    soba_para.x = 800;
+	    sobai++;
 	}
+	
     }
 
     else if(point < 100){
@@ -132,10 +132,10 @@ function mainGame(){
     }
 
     //move objects
-    soba_para.x -= 10;
+    soba_arr[sobai] -= 10;
     rock_para.x -= 10;
 
-    if(soba_para.x < 0) soba_para.x = 800;
+    if(soba_arr[sobai] < 0) sobai++;
     //if(rock_para.x == 0) rock_para.x = 800;
 
 }
@@ -150,31 +150,21 @@ function happyEnd(){
 }
 
 function mousePressed(){
-
-}
-
-function keyPressed() {
-    console.log(keyCode);
-    if (keyCode === ENTER) {
-	if(point < 50){
-	    s_titan.y -= 150;
-	}
-	
-	if(point < 100){
-	    m_titan.y -= 150;
-	}
-
-	if(point < 150){
-	    l_titan.y -= 150;
-	}
-  }
-    
-    return false;
-    
-}
-
-function keyReleased() {
     if(point < 50){
+	s_titan.y -= 150;
+    }
+    
+    if(point < 100){
+	m_titan.y -= 150;
+    }
+    
+    if(point < 150){
+	    l_titan.y -= 150;
+    }
+}
+
+function mouseReleased(){
+  if(point < 50){
 	s_titan.y += 150;
     }
 
@@ -185,5 +175,39 @@ function keyReleased() {
     if(point < 150){
 	l_titan.y += 150;
     }
-  
 }
+
+// function keyPressed() {
+//     console.log(keyCode);
+//     if (keyCode === ENTER) {
+// 	if(point < 50){
+// 	    s_titan.y -= 150;
+// 	}
+	
+// 	if(point < 100){
+// 	    m_titan.y -= 150;
+// 	}
+
+// 	if(point < 150){
+// 	    l_titan.y -= 150;
+// 	}
+//   }
+    
+//     return false;
+    
+// }
+
+// function keyReleased() {
+//     if(point < 50){
+// 	s_titan.y += 150;
+//     }
+
+//     if(point < 100){
+// 	m_titan.y += 150;
+//     }
+    
+//     if(point < 150){
+// 	l_titan.y += 150;
+//     }
+  
+// }
