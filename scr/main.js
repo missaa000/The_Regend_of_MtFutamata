@@ -10,6 +10,7 @@ let obj;
 let gnd;
 let negisoba;
 let rock;
+let ending = [];
 
 //timers
 let objecttimer = 0;
@@ -23,7 +24,7 @@ let s_titan = {
     img : 0,
     imgx : 120,
     imgy : 130,
-    p : 100,
+    p : 80,
 };
 
 let m_titan = {
@@ -61,6 +62,10 @@ let rock_para = {
 function preload(){
     obj = loadImage('../image/objects.png');
     gnd = loadImage('../image/ground.png');
+    ending[0] = loadImage('../image/happyend.png');
+    ending[1] = loadImage('../image/trueend.png');
+    ending[2] = loadImage('../image/happyend.png');
+    ending[3] = loadImage('../image/gameover.png');
 }
 
 
@@ -71,6 +76,10 @@ function setup(){
     //images
     obj.loadPixels();
     gnd.loadPixels();
+    for(let i = 0; i < 3; i++){
+	ending[i].loadPixels();
+    }
+    
     negisoba = obj.get(30, 10, 130, 130);
     rock = obj.get(240, 30, 130, 110);
     s_titan.img = obj.get(10, 370, 120, 130);
@@ -124,7 +133,7 @@ function mainGame(){
 	    soba_i++;
 	}
 
-	if(soba_i >= 15) gamestate = 5;
+	if(soba_i >= 15) endRun(5);
 	
     }
 
@@ -135,7 +144,7 @@ function mainGame(){
 	    soba_i++;
 	}
 	
-	if(soba_i >= 15) gamestate = 4;
+	if(soba_i >= 15) endRun(4);
 	
     }
     
@@ -146,8 +155,8 @@ function mainGame(){
 	    soba_i++;
 	}
 	
-	if(point >= 150) gamestate = 3;
-	else if(soba_i >= 15) gamestate = 4;
+	if(point >= 150) endRun(3);
+	else if(soba_i >= 15) endRun(4);
     }
 
     //move objects
@@ -164,20 +173,23 @@ function mainGame(){
 }
 
 function gameOver(){
-    background(100, 150, 255);
+    image(ending[3], 0, 0);
+}
 
+function endRun(state){
+    gamestate = state;
 }
 
 function happyEnd(){
-    background(300, 100, 100);
+    image(ending[0], 0, 0);
 }
 
 function trueEnd(){
-    background(100, 100, 300);
+    image(ending[1], 0, 0);
 }
 
 function badEnd(){
-    background(0, 0, 0);
+    image(ending[2], 0, 0);
 }
 
 function mousePressed(){
@@ -242,3 +254,4 @@ function mouseReleased(){
 //     }
   
 // }
+B
