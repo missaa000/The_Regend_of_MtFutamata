@@ -4,6 +4,7 @@ let point;
 let level;
 let soba_i;
 let rock_i;
+let init;
 
 //images
 let obj;
@@ -12,10 +13,10 @@ let negisoba;
 let rock;
 let ending = [];
 
-//timers
-let objecttimer = 0;
-
 //objects
+let nowImg;
+let titanx;
+let titany;
 let soba_arr = [800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 1000];
 let rock_arr = [1000, 900, 1000, 1300, 1500, 1000, 1400, 1200, 1000, 1300, 1000, 1400, 1200, 1000, 1300, 1000]
 let s_titan = {
@@ -68,7 +69,6 @@ function preload(){
     ending[3] = loadImage('../image/gameover.png');
 }
 
-
 //setup
 function setup(){
     createCanvas(800, 500);
@@ -85,6 +85,11 @@ function setup(){
     s_titan.img = obj.get(10, 370, 120, 130);
     m_titan.img = obj.get(160, 180, 250, 300);
     l_titan.img = obj.get(430, 40, 350, 430);
+
+    nowImg = s_titan.img;
+    titanx = s_titan.x;
+    titany = s_titan.y;
+    init = false;
     
     gamestate = 1;
     point = 0;
@@ -125,10 +130,11 @@ function mainGame(){
     image(negisoba, soba_arr[soba_i], soba_para.y);
     image(rock, rock_arr[rock_i], rock_para.y);
 
-    //titan size
+    //titan size controll
+    //small
     if(point < s_titan.p){
-	image(s_titan.img, s_titan.x, s_titan.y);
-	if(soba_arr[soba_i] <= 200 && soba_para.y <= s_titan.y){
+	image(nowImg, titanx, titany);
+	if(soba_arr[soba_i] <= 200 && soba_para.y <= titany){
 	    point += 10;
 	    soba_i++;
 	}
@@ -137,42 +143,46 @@ function mainGame(){
 	
     }
 
+    //mideum 
     else if(point < m_titan.p){
-	image(m_titan.img, m_titan.x, m_titan.y);
+	nowImg = m_titan.img;
+	image(nowImg, m_titan.x, m_titan.y);
 	if(soba_arr[soba_i] <= 200 && soba_para.y <= (m_titan.y + m_titan.imgy)){
 	    point += 10;
 	    soba_i++;
 	}
 	
 	if(soba_i >= 15) endRun(4);
-	
     }
-    
+
+    //large
     else{
-	image(l_titan.img, l_titan.x, l_titan.y);
+	nowImg = l_titan.img;
+	image(nowImg, l_titan.x, l_titan.y);
 	if(soba_arr[soba_i] <= 200 && soba_para.y <= (l_titan.y + l_titan.imgy)){
 	    point += 10;
 	    soba_i++;
 	}
-	
+
 	if(point >= 150) endRun(3);
+	//get all negisoba
 	else if(soba_i >= 15) endRun(4);
     }
 
     //move objects
     soba_arr[soba_i] -= 10;
     rock_arr[rock_i] -= 10;
-
     if(soba_arr[soba_i] < -30) soba_i++;
     if(rock_arr[rock_i] < -30) rock_i++;
 
+    //gameOver
     if(rock_arr[rock_i] == 200 && !mouseIsPressed){
 	gamestate = 2;
     }
 
 }
 
-function gameOver(){
+function gameOver(){    
     image(ending[3], 0, 0);
 }
 
@@ -194,7 +204,7 @@ function badEnd(){
 
 function mousePressed(){
     if(point < s_titan.p){
-	s_titan.y -= 150;
+	titany -= 150;
     }
     
     if(point < m_titan.p){
@@ -208,7 +218,7 @@ function mousePressed(){
 
 function mouseReleased(){
   if(point < s_titan.p){
-	s_titan.y += 150;
+	titany += 150;
     }
 
     if(point < m_titan.p){
@@ -254,4 +264,3 @@ function mouseReleased(){
 //     }
   
 // }
-B
