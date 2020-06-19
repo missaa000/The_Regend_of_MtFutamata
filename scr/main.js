@@ -16,6 +16,7 @@ let ending = [];
 let nowImg;
 let titanx;
 let titany;
+let nowImgy;
 let soba_arr = [800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 1000];
 let rock_arr = [1000, 900, 1000, 1300, 1500, 1000, 1400, 1200, 1000, 1300, 1000, 1400, 1200, 1000, 1300, 1000]
 let s_titan = {
@@ -63,9 +64,9 @@ function preload(){
     obj = loadImage('../image/objects.png');
     gnd = loadImage('../image/ground.png');
     ending[0] = loadImage('../image/happyend.png');
-    ending[1] = loadImage('../image/trueend.png');
+  //  ending[1] = loadImage('../image/trueend.png');
     ending[2] = loadImage('../image/happyend.png');
-    ending[3] = loadImage('../image/gameover.png');
+//    ending[3] = loadImage('../image/gameover.png');
 }
 
 //setup
@@ -76,7 +77,7 @@ function setup(){
     obj.loadPixels();
     gnd.loadPixels();
     for(let i = 0; i < 3; i++){
-	ending[i].loadPixels();
+//	ending[i].loadPixels();
     }
     
     negisoba = obj.get(30, 10, 130, 130);
@@ -88,6 +89,7 @@ function setup(){
     nowImg = s_titan.img;
     titanx = s_titan.x;
     titany = s_titan.y;
+    nowImgy = s_titan.imgy;
     
     gamestate = 1;
     point = 0;
@@ -138,6 +140,9 @@ function mainGame(){
 	}
 
 	if(soba_i >= 15) endRun(5);
+	if(point == s_titan.p){
+	    setData(m_titan.img, m_titan.imgy, titanx = m_titan.x, titany = m_titan.y);
+	}
 	
     }
 
@@ -151,6 +156,9 @@ function mainGame(){
 	}
 	
 	if(soba_i >= 15) endRun(4);
+	if(point == m_titan.p){
+	    setData(l_titan.img. l_titan.imgy, titanx = l_titan.x, titany = l_titan.y);
+	}
     }
 
     //large
@@ -180,8 +188,15 @@ function mainGame(){
 
 }
 
+function setData(img, imgy, x, y){
+    nowImg = img;
+    nowImgy = imgy;
+    titanx = x;
+    titany = y;
+}
+
 function gameOver(){    
-    image(ending[3], 0, 0);
+  //  image(ending[3], 0, 0);
 }
 
 function endRun(state){
@@ -193,11 +208,11 @@ function happyEnd(){
 }
 
 function trueEnd(){
-    image(ending[1], 0, 0);
+    //image(ending[1], 0, 0);
 }
 
 function badEnd(){
-    image(ending[2], 0, 0);
+    //image(ending[2], 0, 0);
 }
 
 // function mousePressed(){
@@ -231,51 +246,11 @@ function badEnd(){
 function keyPressed() {
     console.log(keyCode);
     if (keyCode === ENTER) {
-	if(point < 50){
-	    s_titan.y -= 150;
-	}
-	
-	if(point < 100){
-	    m_titan.y -= 150;
-	}
-
-	if(point < 150){
-	    l_titan.y -= 150;
-	}
-  }
-    
-    return false;
-    
-}
-
-function keyPressed(){
-    if(keyCode === ENTER){
-	if(point < 50){
-	    titany -= 150;
-	}
-	
-	if(point < 100){
-	    m_titan.y -= 150;
-	}
-	
-	if(point < 150){
-	    l_titan.y -= 150;
-	}
+	titany -= 150;
     }
 }
 
 function keyReleased() {
-    if(point < 50){
-	titany += 150;
-    }
-
-    if(point < 100){
-	m_titan.y += 150;
-    }
-    
-    if(point < 150){
-	l_titan.y += 150;
-    }
-  
+    titany += 150;
 }
 
