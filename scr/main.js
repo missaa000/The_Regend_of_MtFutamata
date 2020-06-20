@@ -4,6 +4,7 @@ let point;
 let level;
 let soba_i;
 let rock_i;
+let powerUp;
 
 //images
 let obj;
@@ -25,7 +26,7 @@ let s_titan = {
     img : 0,
     imgx : 120,
     imgy : 130,
-    p : 10,
+    p : 80,
 };
 
 let m_titan = {
@@ -95,7 +96,7 @@ function setup(){
     point = 0;
     soba_i = 0;
     rock_i = 0;
-
+    powerUp = true;
 }
 
 
@@ -134,23 +135,23 @@ function mainGame(){
     //small
     if(point <= s_titan.p){
 	if(soba_i >= 15) endRun(5);
-	if(point == 10){
-	    setData(m_titan.img, m_titan.imgy, titanx = m_titan.x, titany = m_titan.y);
+	if(point == s_titan.p && powerUp){
+	    setData(m_titan.img, m_titan.imgy, m_titan.x, m_titan.y);
 	}
     }
 
     //mideum 
-    else if(point < m_titan.p){
+    else if(point <= m_titan.p){
 	if(soba_i >= 15) endRun(4);
-	if(point == m_titan.p){
+	if(point < m_titan.p) powerUp = true;
+	if(point == m_titan.p && powerUp){
 	    setData(l_titan.img, l_titan.imgy, l_titan.x, l_titan.y);
 	}
     }
 
     //large
     else{
-	if(point >= 150) endRun(3);
-	//get all negisoba
+	if(point >= l_titan.p) endRun(3);
 	else if(soba_i >= 15) endRun(4);
     }
 
@@ -181,6 +182,7 @@ function setData(img, imgy, x, y){
     nowImgy = imgy;
     titanx = x;
     titany = y;
+    powerUp = false;
 }
 
 function gameOver(){    
@@ -191,45 +193,20 @@ function endRun(state){
     gamestate = state;
 }
 
+//3
 function happyEnd(){
     image(ending[0], 0, 0);
 }
 
+//4
 function trueEnd(){
     //image(ending[1], 0, 0);
 }
 
+//5
 function badEnd(){
     //image(ending[2], 0, 0);
 }
-
-// function mousePressed(){
-//     if(point < s_titan.p){
-// 	titany -= 150;
-//     }
-    
-//     if(point < m_titan.p){
-// 	m_titan.y -= 150;
-//     }
-    
-//     if(point < l_titan.p){
-// 	l_titan.y -= 150;
-//     }
-// }
-
-// function mouseReleased(){
-//   if(point < s_titan.p){
-// 	titany += 150;
-//     }
-
-//     if(point < m_titan.p){
-// 	m_titan.y += 150;
-//     }
-    
-//     if(point < l_titan.p){
-// 	l_titan.y += 150;
-//     }
-// }
 
 function keyPressed() {
     console.log(keyCode);
@@ -241,4 +218,3 @@ function keyPressed() {
 function keyReleased() {
     titany += 150;
 }
-
