@@ -69,9 +69,9 @@ function preload(){
     obj = loadImage('../image/objects.png');
     gnd = loadImage('../image/ground.png');
     ending[0] = loadImage('../image/happyend.png');
-  //  ending[1] = loadImage('../image/trueend.png');
+    ending[1] = loadImage('../image/trueend.png');
     ending[2] = loadImage('../image/happyend.png');
-//    ending[3] = loadImage('../image/gameover.png');
+    ending[3] = loadImage('../image/gameover.png');
 }
 
 //setup
@@ -82,7 +82,7 @@ function setup(){
     obj.loadPixels();
     gnd.loadPixels();
     for(let i = 0; i < 3; i++){
-//	ending[i].loadPixels();
+	ending[i].loadPixels();
     }
     
     negisoba = obj.get(30, 10, 130, 130);
@@ -198,20 +198,21 @@ function imgShow(flag){
     image(nowImg, 0, 0);
 }
 
-function gameOver(){
-    titanx += 20;
-    titany -= 10;
-    imgShow(1);
-
-    if(titany < -500){
-	//image(ending[3], 0, 0);
-	titany = -500;
-	background(100, 200, 300);
-    }
-}
-
 function endRun(state){
     gamestate = state;
+}
+
+//2
+function gameOver(){
+    if(titany <= -510){
+	image(ending[3], 0, 0);
+	titany = -510;
+    }
+    else{
+	titanx += 20;
+	titany -= 10;
+	imgShow(1);
+    }
 }
 
 //3
@@ -221,12 +222,12 @@ function happyEnd(){
 
 //4
 function trueEnd(){
-    //image(ending[1], 0, 0);
+    image(ending[1], 0, 0);
 }
 
 //5
 function badEnd(){
-    //image(ending[2], 0, 0);
+    image(ending[2], 0, 0);
 }
 
 function keyPressed() {
