@@ -25,7 +25,7 @@ let s_titan = {
     img : 0,
     imgx : 120,
     imgy : 130,
-    p : 80,
+    p : 10,
 };
 
 let m_titan = {
@@ -89,7 +89,7 @@ function setup(){
     nowImg = s_titan.img;
     titanx = s_titan.x;
     titany = s_titan.y;
-    nowImgy = s_titan.imgy;
+    nowImgy = 0;
     
     gamestate = 1;
     point = 0;
@@ -132,47 +132,35 @@ function mainGame(){
 
     //titan size controll
     //small
-    if(point < s_titan.p){
-	image(nowImg, titanx, titany);
-	if(soba_arr[soba_i] <= 200 && soba_para.y <= titany){
-	    point += 10;
-	    soba_i++;
-	}
-
+    if(point <= s_titan.p){
 	if(soba_i >= 15) endRun(5);
-	if(point == s_titan.p){
+	if(point == 10){
 	    setData(m_titan.img, m_titan.imgy, titanx = m_titan.x, titany = m_titan.y);
 	}
-	
     }
 
     //mideum 
     else if(point < m_titan.p){
-	nowImg = m_titan.img;
-	image(nowImg, m_titan.x, m_titan.y);
-	if(soba_arr[soba_i] <= 200 && soba_para.y <= (m_titan.y + m_titan.imgy)){
-	    point += 10;
-	    soba_i++;
-	}
-	
 	if(soba_i >= 15) endRun(4);
 	if(point == m_titan.p){
-	    setData(l_titan.img. l_titan.imgy, titanx = l_titan.x, titany = l_titan.y);
+	    setData(l_titan.img, l_titan.imgy, l_titan.x, l_titan.y);
 	}
     }
 
     //large
     else{
-	nowImg = l_titan.img;
-	image(nowImg, l_titan.x, l_titan.y);
-	if(soba_arr[soba_i] <= 200 && soba_para.y <= (l_titan.y + l_titan.imgy)){
-	    point += 10;
-	    soba_i++;
-	}
-
 	if(point >= 150) endRun(3);
 	//get all negisoba
 	else if(soba_i >= 15) endRun(4);
+    }
+
+    image(nowImg, titanx, titany);
+
+    //increase point
+    if(soba_arr[soba_i] <= 200 && soba_para.y <= (titany + nowImgy)){
+    	point += 10;
+    	console.log(point);
+    	soba_i++;
     }
 
     //move objects
@@ -245,7 +233,7 @@ function badEnd(){
 
 function keyPressed() {
     console.log(keyCode);
-    if (keyCode === ENTER) {
+    if (keyCode === UP_ARROW) {
 	titany -= 150;
     }
 }
