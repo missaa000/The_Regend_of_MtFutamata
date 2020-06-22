@@ -7,14 +7,17 @@ let rock_i;
 let powerUp;
 let maxFlowing;
 let angle;
+let keyFlag;
 
 //images
 let obj;
 let gnd;
 let negisoba;
 let rock;
-let ending = [];
-
+let happyImg;
+let trueImg;
+let badImg;
+let gameoverImg;
 //objects
 let nowImg;
 let titanx;
@@ -22,8 +25,8 @@ let titany;
 let nowImgy;
 
 //Flowing items x coordenate
-let soba_arr = [800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 1000];
-let rock_arr = [1000, 900, 1000, 1300, 1500, 1000, 1400, 1200, 1000, 1300, 1000, 1400, 1200, 1000, 1300, 0]
+let soba_arr = [800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 1000, 800];
+let rock_arr = [1000, 900, 1000, 1300, 1500, 1000, 1400, 1200, 1000, 1300, 1000, 1400, 1200, 1000, 1300, 100, 0]
 let s_titan = {
     x : 130,
     y : 290,
@@ -68,10 +71,10 @@ let rock_para = {
 function preload(){
     obj = loadImage('../image/objects.png');
     gnd = loadImage('../image/ground.png');
-    ending[0] = loadImage('../image/happyend.png');
-    ending[1] = loadImage('../image/trueend.png');
-    ending[2] = loadImage('../image/happyend.png');
-    ending[3] = loadImage('../image/gameover.png');
+    happyImg = loadImage('../image/happyend.png');
+    trueImg = loadImage('../image/trueend.png');
+    badImg = loadImage('../image/badend.png');
+    gameoverImg = loadImage('../image/gameover.png');
 }
 
 //setup
@@ -81,9 +84,10 @@ function setup(){
     //images
     obj.loadPixels();
     gnd.loadPixels();
-    for(let i = 0; i < 3; i++){
-	ending[i].loadPixels();
-    }
+    happyImg.loadPixels();
+    trueImg.loadPixels();
+    badImg.loadPixels();
+    gameoverImg.loadPixels();
     
     negisoba = obj.get(30, 10, 130, 130);
     rock = obj.get(240, 30, 130, 110);
@@ -95,7 +99,7 @@ function setup(){
     titanx = s_titan.x;
     titany = s_titan.y;
     nowImgy = 0;
-    maxFlowing = 20;
+    maxFlowing = 15;
     
     gamestate = 1;
     score = 0;
@@ -103,6 +107,7 @@ function setup(){
     rock_i = 0;
     powerUp = true;
     angle = 0;
+    keyFlag = false;
 }
 
 
@@ -159,7 +164,7 @@ function mainGame(){
     }
   
     //increase point
-    if(soba_arr[soba_i] <= 200 && soba_para.y <= (titany + nowImgy)){
+    if(-10 <= soba_arr[soba_i] && soba_arr[soba_i] <= 200 && soba_para.y <= (titany + nowImgy)){
     	score += 10;
     	console.log(score);
     	soba_i++;
@@ -199,13 +204,19 @@ function imgShow(flag){
 }
 
 function endRun(state){
-    gamestate = state;
+    rock_arr[rock_i] = -100;
+    soba_arr[soba_i] = -100;
+    titanx += 10;
+
+    if(titanx > 550){
+	gamestate = state;
+    }
 }
 
 //2
 function gameOver(){
     if(titany <= -510){
-	image(ending[3], 0, 0);
+	image(gameoverImg, 0, 0);
 	titany = -510;
     }
     else{
@@ -217,27 +228,31 @@ function gameOver(){
 
 //3
 function happyEnd(){
-    image(ending[0], 0, 0);
+    image(happyImg, 0, 0);
 }
 
 //4
 function trueEnd(){
-    image(ending[1], 0, 0);
+    image(trueImg, 0, 0);
 }
 
 //5
 function badEnd(){
-    image(ending[2], 0, 0);
+    image(badImg, 0, 0);
 }
 
 function keyPressed() {
     if (keyCode === UP_ARROW) {
 	titany -= 150;
+	keyFlag = true;
     }
 }
 
 function keyReleased() {
-    titany += 150;
+    if(keyFlag == true){
+	titany += 150;
+	keyFlag = false;
+    }
 }
 
 // function mousePressed(){
