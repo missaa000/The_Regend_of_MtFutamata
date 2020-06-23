@@ -21,10 +21,11 @@ let badImg;
 let gameoverImg;
 
 //timer
-let openingTimer;
+let animationTimer;
 
-//font
-let font;
+//text
+let textx;
+let texty;
 
 //objects
 let nowImg;
@@ -84,6 +85,7 @@ function preload(){
     badImg = loadImage('../image/badend.png');
     gameoverImg = loadImage('../image/gameover.png');
     titanImg = loadImage('../image/daitanbou.png');
+    mountImg = loadImage('../image/mountain.png');
 }
 
 //setup
@@ -118,7 +120,9 @@ function setup(){
     angle = 0;
     keyFlag = false;
 
-    openingTimer = 0;
+    animationTimer = -400;
+    textx = 450;
+    texty = 200;
 }
 
 
@@ -193,7 +197,7 @@ function mainGame(){
 
     //gameOver
     if(rock_arr[rock_i] == 200 && !keyIsPressed){
-	gamestate = 2;
+	gameState = 2;
     }
 }
 
@@ -216,6 +220,9 @@ function imgShow(flag){
 	angle += 4;
     }
     image(nowImg, 0, 0);
+    animationTimer += 10;
+
+    if(animationTimer >= 800) animationTimer = 0;
 }
 
 function endRun(state){
@@ -233,30 +240,54 @@ function openingAnimation(){
 	background(100, 150, 255);
 	
 	noStroke();
-	ellipse(220, 100, 200, 100);
-	ellipse(450, 300, 150, 100);
-	ellipse(550, 340, 250, 150);
-	
-	textSize(30);
-	text("むかーしむかしあるところに...", 300, 200);
+	ellipse(220 - animationTimer, 100, 200, 100);
+	ellipse(450 - animationTimer, 300, 150, 100);
+	ellipse(550 - animationTimer, 340, 250, 150);
+	ellipse(800 - animationTimer, 250, 200, 100);
+
+	textSize(20);
+	text("むかーしむかしあるところに...", textx, texty);
+
+	animationTimer += 0.5;
+	if(animationTimer > 900) animationTimer = -700;
     }
 
     if(textState == 1){
 	background(255, 255, 255);
 	
-	if(openingTimer < 30){
+	if(0 <= animationTimer && animationTimer < 30){
 	    image(daitanbou1, 0, 0);
-	    openingTimer += 10;
+	    animationTimer += 10;
 	}
-	else if(30 <= openingTimer && openingTimer < 60){
+	else if(30 <= animationTimer && animationTimer <= 60){
 	    image(daitanbou2, 0, 0);
-	    openingTimer += 10;
+	    animationTimer += 10;
 
-	    if(openingTimer == 60) openingTimer = 0;
+	    if(animationTimer == 60) animationTimer = 0;
 	}
 
-	text("ダイタンボウという巨人がいました", 300, 200);
+	else animationTimer = 0;
+
+	text("ダイタンボウという巨人がいました", textx, texty);
     }
+
+    if(textState == 2){
+	image(mountImg, 0, 0 + animationTimer);
+	text("大変だ！目の前に大きな山が！\n今のダイタンボウでは山に\n打ち勝てない！", textx, texty);
+	animationTimer += 2;
+	if(animationTimer > 50) animationTimer = 0;
+    }
+
+    if(textState == 3){
+	background(255, 255, 255);
+	text("あ！あれはねぎそばだ！\nねぎそばを食べて力をつけよう！", textx, texty);
+	image(negisoba, 300, 275 + animationTimer);
+	
+	animationTimer += 2;
+	if(animationTimer > 70) animationTimer = 0;
+    }
+
+    if(textState == 4) gameState = 1;
 }
 
 //2
