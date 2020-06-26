@@ -97,6 +97,7 @@ function setup(){
     gnd.loadPixels();
     titanImg.loadPixels();
     
+    
     negisoba = obj.get(30, 10, 130, 130);
     rock = obj.get(240, 30, 130, 110);
     s_titan.img = obj.get(10, 370, s_titan.imgx, s_titan.imgy);
@@ -155,6 +156,72 @@ function draw(){
 
 
 //mainGame
+function initStatus(){
+    nowImg = s_titan.img;
+    titanx = s_titan.x;
+    titany = s_titan.y;
+    nowImgy = 0;
+    maxFlowing = 15;
+    score = 0;
+    soba_i = 0;
+    rock_i = 0;
+    powerUp = true;
+    angle = 0;
+    keyFlag = false;
+    soba_arr = [800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 1000, 800];
+    rock_arr = [1000, 900, 1000, 1300, 1500, 1000, 1400, 1200, 1000, 1300, 1000, 1400, 1200, 1000, 1300, 100, 0];
+}
+
+function setData(img, imgy, x, y){
+    nowImg = img;
+    nowImgy = imgy;
+    titanx = x;
+    titany = y;
+    powerUp = false;
+}
+
+function imgShow(flag){
+    background(100, 150, 255);
+    image(gnd, 0, 0);
+    image(negisoba, soba_arr[soba_i], soba_para.y);
+    image(rock, rock_arr[rock_i], rock_para.y);
+    translate(titanx, titany);
+    if(flag == 1){
+	rotate(radians(angle));
+	angle += 4;
+    }
+    image(nowImg, 0, 0);
+    animationTimer += 10;
+
+    if(animationTimer >= 800) animationTimer = 0;
+}
+
+function endRun(state){
+    rock_arr[rock_i] = 800;
+    soba_arr[soba_i] = 800;
+    titanx += 10;
+
+    if(titanx > 550){
+	gameState = state;
+    }
+}
+
+function makingLine(){
+    let x = 10;
+    let y = 20;
+    stroke(1);
+    strokeWeight(2);
+    for(let i = -300; i <= 1050; i+= 150){
+	line(i, 0, 100+i/1.4+random(x, y), 100+random(x, y));
+	line(i, 500, 100+i/1.4+random(x, y), 400+random(x, y));
+    }
+    
+    line(0, 250, 20+random(10, 20), 250+random(10, 20));
+    line(800, 250, 780+random(10, 20), 250+random(10, 20));
+    
+}
+
+//1
 function mainGame(){
     imgShow(0);
     
@@ -201,105 +268,11 @@ function mainGame(){
     }
 }
 
-function setData(img, imgy, x, y){
-    nowImg = img;
-    nowImgy = imgy;
-    titanx = x;
-    titany = y;
-    powerUp = false;
-}
-
-function imgShow(flag){
-    background(100, 150, 255);
-    image(gnd, 0, 0);
-    image(negisoba, soba_arr[soba_i], soba_para.y);
-    image(rock, rock_arr[rock_i], rock_para.y);
-    translate(titanx, titany);
-    if(flag == 1){
-	rotate(radians(angle));
-	angle += 4;
-    }
-    image(nowImg, 0, 0);
-    animationTimer += 10;
-
-    if(animationTimer >= 800) animationTimer = 0;
-}
-
-function endRun(state){
-    rock_arr[rock_i] = -100;
-    soba_arr[soba_i] = -100;
-    titanx += 10;
-
-    if(titanx > 550){
-	gameState = state;
-    }
-}
-
-function openingAnimation(){
-    if(textState == 0){
-	background(100, 150, 255);
-	
-	noStroke();
-	ellipse(220 - animationTimer, 100, 200, 100);
-	ellipse(450 - animationTimer, 300, 150, 100);
-	ellipse(550 - animationTimer, 340, 250, 150);
-	ellipse(800 - animationTimer, 250, 200, 100);
-
-	textSize(20);
-	text("むかーしむかしあるところに...", textx, texty);
-
-	animationTimer += 0.5;
-	if(animationTimer > 900) animationTimer = -700;
-    }
-
-    if(textState == 1){
-	background(255, 255, 255);
-	
-	if(0 <= animationTimer && animationTimer < 30){
-	    image(daitanbou1, 0, 0);
-	    animationTimer += 10;
-	}
-	else if(30 <= animationTimer && animationTimer <= 60){
-	    image(daitanbou2, 0, 0);
-	    animationTimer += 10;
-
-	    if(animationTimer == 60) animationTimer = 0;
-	}
-
-	else animationTimer = 0;
-
-	text("ダイタンボウという巨人がいました", textx, texty);
-    }
-
-    if(textState == 2){
-	image(mountImg, 0, 0);
-	stroke(1);
-	for(let i = -150; i <= 400; i+= 150){
-	    line(i, 0, 100 + i/1.3, 150);
-	    line(i, 500, 100 + i/1.3, 350);
-	    line(800-i, 0, i/1.3, 150);
-	    line(800-i, 500, i/1.3, 150);
-	}
-	
-	text("大変だ！目の前に大きな山が！\n今のダイタンボウでは山に\n打ち勝てない！", textx, texty);
-    }
-
-    if(textState == 3){
-	background(255, 255, 255);
-	text("あ！あれはねぎそばだ！\nねぎそばを食べて力をつけよう！", textx, texty);
-	image(negisoba, 300, 275 + animationTimer);
-	
-	animationTimer += 2;
-	if(animationTimer > 70) animationTimer = 0;
-    }
-
-    if(textState == 4) gameState = 1;
-}
-
 //2
 function gameOver(){
     if(titany <= -510){
 	image(gameoverImg, 0, 0);
+	text("Enterでゲームに戻る", textx+100, texty+100);
 	titany = -510;
     }
     else{
@@ -329,9 +302,70 @@ function keyPressed() {
 	titany -= 150;
 	keyFlag = true;
     }
+    else if(gameState == 2){
+	initStatus();
+	gameState = 1;
+    }
     else{
 	textState++;
     }
+}
+
+//6
+function openingAnimation(){
+    if(textState == 0){
+	background(100, 150, 255);
+	
+	noStroke();
+	ellipse(220 - animationTimer, 100, 200, 100);
+	ellipse(450 - animationTimer, 300, 150, 100);
+	ellipse(550 - animationTimer, 340, 250, 150);
+	ellipse(800 - animationTimer, 250, 200, 100);
+
+	textSize(25);
+	text("むかーしむかしあるところに...", textx, texty);
+
+	animationTimer += 0.5;
+	if(animationTimer > 900) animationTimer = -700;
+    }
+
+    if(textState == 1){
+	background(255, 255, 255);
+	
+	if(0 <= animationTimer && animationTimer < 30){
+	    image(daitanbou1, 0, 0);
+	    animationTimer += 10;
+	}
+	else if(30 <= animationTimer && animationTimer <= 60){
+	    image(daitanbou2, 0, 0);
+	    animationTimer += 10;
+
+	    if(animationTimer == 60) animationTimer = 0;
+	}
+
+	else animationTimer = 0;
+
+	text("ダイタンボウという巨人がいました", textx, texty);
+    }
+
+    if(textState == 2){
+	image(mountImg, 0, 0);
+	strokeWeight(1);
+	text("大変だ！目の前に大きな山が！\n今のダイタンボウでは山に\n打ち勝てない！", textx, texty);
+	makingLine();	
+    }
+
+    if(textState == 3){
+	background(255, 255, 255);
+	strokeWeight(1);
+	text("あ！あれはねぎそばだ！\nねぎそばを食べて力をつけよう！", textx, texty);
+	image(negisoba, 300, 200 + animationTimer);
+	makingLine();
+	animationTimer += 2;
+	if(animationTimer > 70) animationTimer = 0;
+    }
+
+    if(textState == 4) gameState = 1;
 }
 
 function keyReleased() {
