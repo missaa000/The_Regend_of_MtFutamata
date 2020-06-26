@@ -272,10 +272,16 @@ function openingAnimation(){
     }
 
     if(textState == 2){
-	image(mountImg, 0, 0 + animationTimer);
+	image(mountImg, 0, 0);
+	stroke(1);
+	for(let i = -150; i <= 400; i+= 150){
+	    line(i, 0, 100 + i/1.3, 150);
+	    line(i, 500, 100 + i/1.3, 350);
+	    line(800-i, 0, i/1.3, 150);
+	    line(800-i, 500, i/1.3, 150);
+	}
+	
 	text("大変だ！目の前に大きな山が！\n今のダイタンボウでは山に\n打ち勝てない！", textx, texty);
-	animationTimer += 2;
-	if(animationTimer > 50) animationTimer = 0;
     }
 
     if(textState == 3){
