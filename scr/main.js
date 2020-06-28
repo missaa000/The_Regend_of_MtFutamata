@@ -1,4 +1,4 @@
-//flagsA
+//flags
 let gameState;
 let textState;
 let score;
@@ -121,7 +121,8 @@ function setup(){
     angle = 0;
     keyFlag = false;
 
-    animationTimer = -400;
+    //animationTimer = -400;
+    animationTimer = 0;
     textx = 450;
     texty = 200;
 }
@@ -150,7 +151,8 @@ function draw(){
     }
 
     if(gameState == 6){
-	openingAnimation();
+	//	openingAnimation();
+	endingAnimation(3);
     }
 }
 
@@ -221,6 +223,17 @@ function makingLine(){
     
 }
 
+function endingAnimation(gameState){
+    image(mountImg, 0, 0);
+    makingLine();
+    animationTimer++;
+
+    if(animationTimer >= 100){
+	background(100, 100, 100);
+	animationTimer = 100;
+    }
+}
+
 //1
 function mainGame(){
     imgShow(0);
@@ -271,11 +284,13 @@ function mainGame(){
 //2
 function gameOver(){
     if(titany <= -510){
+	keyFlag = true;
 	image(gameoverImg, 0, 0);
 	text("Enterでゲームに戻る", textx+100, texty+100);
 	titany = -510;
     }
     else{
+	keyFlag = false;
 	titanx += 20;
 	titany -= 10;
 	imgShow(1);
@@ -295,20 +310,6 @@ function trueEnd(){
 //5
 function badEnd(){
     image(badImg, 0, 0);
-}
-
-function keyPressed() {
-    if (gameState == 1 &&keyCode === UP_ARROW) {
-	titany -= 150;
-	keyFlag = true;
-    }
-    else if(gameState == 2){
-	initStatus();
-	gameState = 1;
-    }
-    else{
-	textState++;
-    }
 }
 
 //6
@@ -365,7 +366,24 @@ function openingAnimation(){
 	if(animationTimer > 70) animationTimer = 0;
     }
 
-    if(textState == 4) gameState = 1;
+    if(textState == 4){
+	animationTimer = 0;
+	gameState = 1;
+    }
+}
+
+function keyPressed() {
+    if (gameState == 1 && keyCode === UP_ARROW) {
+	titany -= 150;
+	keyFlag = true;
+    }
+    else if(gameState == 2 && keyFlag == true){
+	initStatus();
+	gameState = 1;
+    }
+    else if(gameState == 6){
+	textState++;
+    }
 }
 
 function keyReleased() {
