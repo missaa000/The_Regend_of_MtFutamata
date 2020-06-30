@@ -9,6 +9,7 @@ let powerUp;
 let maxFlowing;
 let angle;
 let keyFlag;
+let alpha;
 
 //images
 let obj;
@@ -120,6 +121,7 @@ function setup(){
     powerUp = true;
     angle = 0;
     keyFlag = false;
+    alpha = 0;
 
     //animationTimer = -400;
     animationTimer = 0;
@@ -151,13 +153,13 @@ function draw(){
     }
 
     if(gameState == 6){
-	//	openingAnimation();
-	endingAnimation(3);
+	//openingAnimation();
+	happyEnd();
     }
 }
 
 
-//mainGame
+//functions
 function initStatus(){
     nowImg = s_titan.img;
     titanx = s_titan.x;
@@ -199,12 +201,13 @@ function imgShow(flag){
 }
 
 function endRun(state){
-    rock_arr[rock_i] = 800;
-    soba_arr[soba_i] = 800;
-    titanx += 10;
-
-    if(titanx > 550){
+    if(titanx > 800){
 	gameState = state;
+    }
+    else{
+	rock_arr[rock_i] = 800;
+	soba_arr[soba_i] = 800;
+	titanx += 10;
     }
 }
 
@@ -221,17 +224,6 @@ function makingLine(){
     line(0, 250, 20+random(10, 20), 250+random(10, 20));
     line(800, 250, 780+random(10, 20), 250+random(10, 20));
     
-}
-
-function endingAnimation(gameState){
-    image(mountImg, 0, 0);
-    makingLine();
-    animationTimer++;
-
-    if(animationTimer >= 100){
-	background(100, 100, 100);
-	animationTimer = 100;
-    }
 }
 
 //1
@@ -299,7 +291,20 @@ function gameOver(){
 
 //3
 function happyEnd(){
-    image(happyImg, 0, 0);
+    if(animationTimer >= 200){
+	image(happyImg, 0, 0);
+    }
+    else if(animationTimer >= 80){
+	noStroke();
+	fill(255, 255, 255, alpha);
+	rect(0, 0, width, height);
+	alpha += 1;
+    }
+    else{
+	image(mountImg, 0, 0);
+	makingLine();
+    }
+    animationTimer++;
 }
 
 //4
@@ -346,7 +351,7 @@ function openingAnimation(){
 
 	else animationTimer = 0;
 
-	text("ダイタンボウという巨人がいました", textx, texty);
+	text("ダイタンボウという\n巨人がいました", textx, texty);
     }
 
     if(textState == 2){
