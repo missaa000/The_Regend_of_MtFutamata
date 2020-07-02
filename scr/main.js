@@ -123,7 +123,6 @@ function setup(){
     keyFlag = false;
     alpha = 0;
 
-    //animationTimer = -400;
     animationTimer = 0;
     textx = 450;
     texty = 200;
@@ -153,8 +152,7 @@ function draw(){
     }
 
     if(gameState == 6){
-	//openingAnimation();
-	happyEnd();
+	openingAnimation();
     }
 }
 
@@ -195,13 +193,10 @@ function imgShow(flag){
 	angle += 4;
     }
     image(nowImg, 0, 0);
-    animationTimer += 10;
-
-    if(animationTimer >= 800) animationTimer = 0;
 }
 
 function endRun(state){
-    if(titanx > 800){
+    if(titanx > 900){
 	gameState = state;
     }
     else{
@@ -294,7 +289,7 @@ function happyEnd(){
     if(animationTimer >= 200){
 	image(happyImg, 0, 0);
     }
-    else if(animationTimer >= 80){
+    else if(animationTimer >= 100){
 	noStroke();
 	fill(255, 255, 255, alpha);
 	rect(0, 0, width, height);
