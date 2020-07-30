@@ -298,7 +298,7 @@ function mainGame(){
     if(rock_arr[rock_i] < -30) rock_i++;
 
     //gameOver
-    if(rock_arr[rock_i] == 200 && !keyIsPressed){
+    if(rock_arr[rock_i] == 200 && !mouseIsPressed){
 	gameState = 2;
     }
 }
@@ -394,8 +394,8 @@ function openingAnimation(){
     }
 }
 
-function keyPressed() {
-    if(gameState == 1 && keyCode === UP_ARROW) {
+function mousePressed() {
+    if(gameState == 1) {
 	titany -= 150;
 	keyFlag = true;
     }
@@ -408,7 +408,7 @@ function keyPressed() {
     }
 }
 
-function keyReleased() {
+function mouseReleased() {
     if(gameState == 1 && keyFlag){
 	titany += 150;
 	keyFlag = false;
