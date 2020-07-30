@@ -17,9 +17,14 @@ let gnd;
 let negisoba;
 let rock;
 let happyImg;
+let makingImg;
 let trueImg;
+let strikeImg;
 let badImg;
 let gameoverImg;
+
+let s_nyu;
+let s_trumpet;
 
 //timer
 let animationTimer;
@@ -82,11 +87,17 @@ function preload(){
     obj = loadImage('../image/objects.png');
     gnd = loadImage('../image/ground.png');
     happyImg = loadImage('../image/happyend.png');
+    makingImg = loadImage('../image/making.png');
     trueImg = loadImage('../image/trueend.png');
+    strikeImg = loadImage('../image/strike.png');
     badImg = loadImage('../image/badend.png');
     gameoverImg = loadImage('../image/gameover.png');
     titanImg = loadImage('../image/daitanbou.png');
     mountImg = loadImage('../image/mountain.png');
+
+//    s_nyu = loadSound('../sounds/nyu3.mp3');
+//    s_trumpet = loadSound('../sounds/trumpet1.mp3');
+
 }
 
 //setup
@@ -97,7 +108,6 @@ function setup(){
     obj.loadPixels();
     gnd.loadPixels();
     titanImg.loadPixels();
-    
     
     negisoba = obj.get(30, 10, 130, 130);
     rock = obj.get(240, 30, 130, 110);
@@ -113,7 +123,7 @@ function setup(){
     nowImgy = 0;
     maxFlowing = 15;
     
-    gameState = 6;
+    gameState = 5;
     textState = 0;
     score = 0;
     soba_i = 0;
@@ -184,7 +194,8 @@ function setData(img, imgy, x, y){
 
 function imgShow(flag){
     background(100, 150, 255);
-    image(gnd, 0, 0);
+    image(gnd, animationTimer, 0);
+    image(gnd, 800 + animationTimer, 0)
     image(negisoba, soba_arr[soba_i], soba_para.y);
     image(rock, rock_arr[rock_i], rock_para.y);
     translate(titanx, titany);
@@ -192,16 +203,21 @@ function imgShow(flag){
 	rotate(radians(angle));
 	angle += 4;
     }
+    else{
+	animationTimer -= 10;
+	if(animationTimer < -800) animationTimer = 0;
+    }
     image(nowImg, 0, 0);
 }
 
 function endRun(state){
     if(titanx > 900){
+	animationTimer = 0;
 	gameState = state;
     }
     else{
-	rock_arr[rock_i] = 800;
-	soba_arr[soba_i] = 800;
+	rock_arr[rock_i] = width;
+	soba_arr[soba_i] = width;
 	titanx += 10;
     }
 }
@@ -304,12 +320,35 @@ function happyEnd(){
 
 //4
 function trueEnd(){
-    image(trueImg, 0, 0);
+    if(animationTimer >= 200){
+	image(trueImg, 0, 0);
+    }
+    else if(animationTimer >= 100){
+	image(makingImg, 0, 0);
+	makingLine();
+    }
+    else{
+	image(mountImg, 0, 0);
+	makingLine();
+    }
+    animationTimer++;
 }
 
 //5
 function badEnd(){
-    image(badImg, 0, 0);
+    if(animationTimer >= 200){
+	image(badImg, 0, 0);
+    }
+
+    else if(animationTimer >= 100){
+	image(strikeImg, 0, 0);
+	makingLine();
+    }
+    else{
+	image(mountImg, 0, 0);
+	makingLine();
+    }
+    animationTimer++;
 }
 
 //6
@@ -321,7 +360,7 @@ function openingAnimation(){
 	ellipse(220 - animationTimer, 100, 200, 100);
 	ellipse(450 - animationTimer, 300, 150, 100);
 	ellipse(550 - animationTimer, 340, 250, 150);
-	ellipse(800 - animationTimer, 250, 200, 100);
+	ellipse(width - animationTimer, 250, 200, 100);
 
 	textSize(25);
 	text("むかーしむかしあるところに...", textx, texty);
@@ -392,11 +431,3 @@ function keyReleased() {
 	keyFlag = false;
     }
 }
-
-// function mousePressed(){
-//     titany -= 150;
-// }
-
-// function mouseReleased(){
-//     titany += 150;
-// }
