@@ -123,7 +123,7 @@ function setup(){
     nowImgy = 0;
     maxFlowing = 15;
     
-    gameState = 5;
+    gameState = 6;
     textState = 0;
     score = 0;
     soba_i = 0;
@@ -178,6 +178,7 @@ function initStatus(){
     soba_i = 0;
     rock_i = 0;
     powerUp = true;
+    animationTimer = 0;
     angle = 0;
     keyFlag = false;
     soba_arr = [800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 1000, 800];
@@ -243,7 +244,7 @@ function mainGame(){
     
     //titan size controll
     //small
-    if(score <= s_titan.score){
+    if(score <= s_titan.score && nowImg == s_titan.img){
 	if(soba_i >= maxFlowing) endRun(5);
 	if(score == s_titan.score && powerUp){
 	    setData(m_titan.img, m_titan.imgy, m_titan.x, m_titan.y);
@@ -251,7 +252,7 @@ function mainGame(){
     }
 
     //mideum 
-    else if(score <= m_titan.score){
+    else if(score <= m_titan.score && nowImg == m_titan.img){
 	if(soba_i >= maxFlowing) endRun(4);
 	if(score < m_titan.score) powerUp = true;
 	if(score == m_titan.score && powerUp){
@@ -261,8 +262,7 @@ function mainGame(){
 
     //large
     else{
-	if(score >= l_titan.score) endRun(3);
-	else if(soba_i >= maxFlowing) endRun(4);
+	if(soba_i >= maxFlowing) endRun(3);
     }
   
     //increase point
@@ -304,6 +304,7 @@ function gameOver(){
 function happyEnd(){
     if(animationTimer >= 200){
 	image(happyImg, 0, 0);
+	animationTimer = 200
     }
     else if(animationTimer >= 100){
 	noStroke();
@@ -322,6 +323,7 @@ function happyEnd(){
 function trueEnd(){
     if(animationTimer >= 200){
 	image(trueImg, 0, 0);
+	animationTimer = 200;
     }
     else if(animationTimer >= 100){
 	image(makingImg, 0, 0);
@@ -338,6 +340,7 @@ function trueEnd(){
 function badEnd(){
     if(animationTimer >= 200){
 	image(badImg, 0, 0);
+	animationTimer = 200;
     }
 
     else if(animationTimer >= 100){
@@ -416,7 +419,7 @@ function keyPressed() {
 	titany -= 150;
 	keyFlag = true;
     }
-    else if(gameState == 2 && keyFlag == true){
+    else if(gameState == 2 || gameState == 4 || gameState == 5){
 	initStatus();
 	gameState = 1;
     }
