@@ -6,7 +6,7 @@ let level;
 let soba_i;
 let rock_i;
 let powerUp;
-let maxFlowing;
+let maxFlowin;
 let angle;
 let keyFlag;
 let alpha;
@@ -22,9 +22,6 @@ let trueImg;
 let strikeImg;
 let badImg;
 let gameoverImg;
-
-let s_nyu;
-let s_trumpet;
 
 //timer
 let animationTimer;
@@ -43,61 +40,57 @@ let nowImgy;
 let soba_arr = [800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 1000, 800];
 let rock_arr = [1000, 900, 1000, 1300, 1500, 1000, 1400, 1200, 1000, 1300, 1000, 1400, 1200, 1000, 1300, 100, 0]
 let s_titan = {
-    x : 130,
-    y : 290,
-    img : 0,
-    imgx : 120,
-    imgy : 130,
+    x     : 130,
+    y     : 290,
+    img   : 0,
+    imgx  : 120,
+    imgy  : 130,
     score : 80,
 };
 
 let m_titan = {
-    x : 50,
-    y : 130,
-    img : 0,
-    imgx : 250,
-    imgy : 300,
+    x     : 50,
+    y     : 130,
+    img   : 0,
+    imgx  : 250,
+    imgy  : 300,
     score : 120,
 };
 
 let l_titan = {
-    x : 0,
-    y : -10,
-    img : 0,
-    imgx : 350,
-    imgy : 430,
+    x     : 0,
+    y     : -10,
+    img   : 0,
+    imgx  : 350,
+    imgy  : 430,
     score : 150,
 };
 
 let soba_para = {
-    y : 290,
+    y  : 290,
     vx : 10,
     vy : 10,
     };
 
 let rock_para = {
-    x : 800,
-    y : 320,
+    x  : 800,
+    y  : 320,
     vx : 10,
     vy : 10
 };
 
 // loading images
 function preload(){
-    obj = loadImage('../image/objects.png');
-    gnd = loadImage('../image/ground.png');
-    happyImg = loadImage('../image/happyend.png');
-    makingImg = loadImage('../image/making.png');
-    trueImg = loadImage('../image/trueend.png');
-    strikeImg = loadImage('../image/strike.png');
-    badImg = loadImage('../image/badend.png');
+    obj         = loadImage('../image/objects.png');
+    gnd         = loadImage('../image/ground.png');
+    happyImg    = loadImage('../image/happyend.png');
+    makingImg   = loadImage('../image/making.png');
+    trueImg     = loadImage('../image/trueend.png');
+    strikeImg   = loadImage('../image/strike.png');
+    badImg      = loadImage('../image/badend.png');
     gameoverImg = loadImage('../image/gameover.png');
-    titanImg = loadImage('../image/daitanbou.png');
-    mountImg = loadImage('../image/mountain.png');
-
-//    s_nyu = loadSound('../sounds/nyu3.mp3');
-//    s_trumpet = loadSound('../sounds/trumpet1.mp3');
-
+    titanImg    = loadImage('../image/daitanbou.png');
+    mountImg    = loadImage('../image/mountain.png');
 }
 
 //setup
@@ -108,34 +101,40 @@ function setup(){
     obj.loadPixels();
     gnd.loadPixels();
     titanImg.loadPixels();
-    
-    negisoba = obj.get(30, 10, 130, 130);
-    rock = obj.get(240, 30, 130, 110);
+    negisoba    = obj.get(30, 10, 130, 130);
+    rock        = obj.get(240, 30, 130, 110);
     s_titan.img = obj.get(10, 370, s_titan.imgx, s_titan.imgy);
     m_titan.img = obj.get(160, 180, m_titan.imgx, m_titan.imgy);
     l_titan.img = obj.get(430, 40, l_titan.imgx, l_titan.imgy);
-    daitanbou1 = titanImg.get(0, 0, 450, 500);
-    daitanbou2 = titanImg.get(500, 0, 300, 500);
+    daitanbou1  = titanImg.get(0, 0, 450, 500);
+    daitanbou2  = titanImg.get(500, 0, 300, 500);
 
-    nowImg = s_titan.img;
-    titanx = s_titan.x;
-    titany = s_titan.y;
-    nowImgy = 0;
-    maxFlowing = 15;
+    //titans state
+    nowImg     = s_titan.img;
+    titanx     = s_titan.x;
+    titany     = s_titan.y;
+    nowImgy    = 0;
+    powerUp    = true;
+
+    //objects
+    objectsNum = 15;
+    soba_i     = 0;
+    rock_i     = 0;
     
-    gameState = 6;
-    textState = 0;
-    score = 0;
-    soba_i = 0;
-    rock_i = 0;
-    powerUp = true;
-    angle = 0;
-    keyFlag = false;
-    alpha = 0;
+    //details
+    gameState  = 6;
+    score      = 0;
+    keyFlag    = false;
 
+    //text
+    textx      = 450;
+    texty      = 200;
+    textState  = 0;
+
+    //animation
     animationTimer = 0;
-    textx = 450;
-    texty = 200;
+    angle      = 0;
+    alpha      = 0;
 }
 
 
@@ -144,52 +143,46 @@ function draw(){
     if(gameState == 1){
 	mainGame();
     }
-
     if(gameState == 2){
 	gameOver();
     }
-
     if(gameState == 3){
 	happyEnd();
     }
-
     if(gameState == 4){
 	trueEnd();
     }
-
     if(gameState == 5){
 	badEnd();
     }
-
     if(gameState == 6){
 	openingAnimation();
     }
 }
 
-
 //functions
 function initStatus(){
-    nowImg = s_titan.img;
-    titanx = s_titan.x;
-    titany = s_titan.y;
-    nowImgy = 0;
-    maxFlowing = 15;
-    score = 0;
-    soba_i = 0;
-    rock_i = 0;
-    powerUp = true;
+    nowImg     = s_titan.img;
+    titanx     = s_titan.x;
+    titany     = s_titan.y;
+    nowImgy    = 0;
+    powerUp    = true;
+    objectsNum = 15;
+    soba_arr   = [800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 1000, 800];
+    rock_arr   = [1000, 900, 1000, 1300, 1500, 1000, 1400, 1200, 1000, 1300, 1000, 1400, 1200, 1000, 1300, 100, 0];
+    soba_i     = 0;
+    rock_i     = 0;
+    score      = 0;
     animationTimer = 0;
-    angle = 0;
-    keyFlag = false;
-    soba_arr = [800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 1000, 800];
-    rock_arr = [1000, 900, 1000, 1300, 1500, 1000, 1400, 1200, 1000, 1300, 1000, 1400, 1200, 1000, 1300, 100, 0];
+    angle      = 0;
+    keyFlag    = false;
 }
 
 function setData(img, imgy, x, y){
-    nowImg = img;
+    nowImg  = img;
     nowImgy = imgy;
-    titanx = x;
-    titany = y;
+    titanx  = x;
+    titany  = y;
     powerUp = false;
 }
 
@@ -200,7 +193,7 @@ function imgShow(flag){
     image(negisoba, soba_arr[soba_i], soba_para.y);
     image(rock, rock_arr[rock_i], rock_para.y);
     translate(titanx, titany);
-    if(flag == 1){
+    if(flag == "rotate"){
 	rotate(radians(angle));
 	angle += 4;
     }
@@ -220,6 +213,7 @@ function endRun(state){
 	rock_arr[rock_i] = width;
 	soba_arr[soba_i] = width;
 	titanx += 10;
+	keyFlag = false;
     }
 }
 
@@ -235,34 +229,59 @@ function makingLine(){
     
     line(0, 250, 20+random(10, 20), 250+random(10, 20));
     line(800, 250, 780+random(10, 20), 250+random(10, 20));
-    
+}
+
+function controlNowTitan(endingState, levelupScore, nextImg, nextImgy, nextx, nexty){
+    if(soba_i >= objectsNum) endRun(endingState);
+    if(score == levelupScore && powerUp){
+	setData(nextImg, nextImgy, nextx, nexty);
+    }
+}
+
+function endingAnimation(endingImg, insertImg, happyEndFlag){
+    if(animationTimer >= 200){
+	image(endingImg, 0, 0);
+	animationTimer = 200;
+	keyFlag = true;
+    }
+    else if(animationTimer >= 100){
+	if(happyEndFlag){
+	    noStroke();
+	    fill(255, 255, 255, alpha);
+	    rect(0, 0, width, height);
+	    alpha += 1;
+	}
+	else{
+	    image(insertImg, 0, 0);
+	    makingLine();
+	}
+    }
+    else{
+	image(mountImg, 0, 0);
+	makingLine();
+    }
+    animationTimer++;
 }
 
 //1
 function mainGame(){
-    imgShow(0);
+    imgShow("nomal");
     
     //titan size controll
     //small
     if(score <= s_titan.score && nowImg == s_titan.img){
-	if(soba_i >= maxFlowing) endRun(5);
-	if(score == s_titan.score && powerUp){
-	    setData(m_titan.img, m_titan.imgy, m_titan.x, m_titan.y);
-	}
+	controlNowTitan(5, s_titan.score, m_titan.img, m_titan.imgy, m_titan.x, m_titan.y);
     }
 
     //mideum 
     else if(score <= m_titan.score && nowImg == m_titan.img){
-	if(soba_i >= maxFlowing) endRun(4);
+	controlNowTitan(4, m_titan.score, l_titan.img, l_titan.imgy, l_titan.x, l_titan.y);
 	if(score < m_titan.score) powerUp = true;
-	if(score == m_titan.score && powerUp){
-	    setData(l_titan.img, l_titan.imgy, l_titan.x, l_titan.y);
-	}
     }
 
     //large
     else{
-	if(soba_i >= maxFlowing) endRun(3);
+	if(soba_i >= objectsNum) endRun(3);
     }
   
     //increase point
@@ -296,62 +315,23 @@ function gameOver(){
 	keyFlag = false;
 	titanx += 20;
 	titany -= 10;
-	imgShow(1);
+	imgShow("rotate");
     }
 }
 
 //3
 function happyEnd(){
-    if(animationTimer >= 200){
-	image(happyImg, 0, 0);
-	animationTimer = 200
-    }
-    else if(animationTimer >= 100){
-	noStroke();
-	fill(255, 255, 255, alpha);
-	rect(0, 0, width, height);
-	alpha += 1;
-    }
-    else{
-	image(mountImg, 0, 0);
-	makingLine();
-    }
-    animationTimer++;
+    endingAnimation(happyImg, makingImg, 1);
 }
 
 //4
 function trueEnd(){
-    if(animationTimer >= 200){
-	image(trueImg, 0, 0);
-	animationTimer = 200;
-    }
-    else if(animationTimer >= 100){
-	image(makingImg, 0, 0);
-	makingLine();
-    }
-    else{
-	image(mountImg, 0, 0);
-	makingLine();
-    }
-    animationTimer++;
+    endingAnimation(trueImg, makingImg, 0);
 }
 
 //5
 function badEnd(){
-    if(animationTimer >= 200){
-	image(badImg, 0, 0);
-	animationTimer = 200;
-    }
-
-    else if(animationTimer >= 100){
-	image(strikeImg, 0, 0);
-	makingLine();
-    }
-    else{
-	image(mountImg, 0, 0);
-	makingLine();
-    }
-    animationTimer++;
+    endingAnimation(badImg, strikeImg, 0);
 }
 
 //6
@@ -415,11 +395,11 @@ function openingAnimation(){
 }
 
 function keyPressed() {
-    if (gameState == 1 && keyCode === UP_ARROW) {
+    if(gameState == 1 && keyCode === UP_ARROW) {
 	titany -= 150;
 	keyFlag = true;
     }
-    else if(gameState == 2 || gameState == 4 || gameState == 5){
+    else if((gameState == 2 || (gameState == 4 || gameState == 5) && keyFlag)){
 	initStatus();
 	gameState = 1;
     }
@@ -429,7 +409,7 @@ function keyPressed() {
 }
 
 function keyReleased() {
-    if(gameState == 1 && keyFlag == true){
+    if(gameState == 1 && keyFlag){
 	titany += 150;
 	keyFlag = false;
     }
