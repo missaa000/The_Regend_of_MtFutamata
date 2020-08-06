@@ -95,7 +95,8 @@ function preload(){
 
 //setup
 function setup(){
-    createCanvas(800, 500);
+    let canvas = createCanvas(800, 500);
+    canvas.parent('canvas');
 
     //images
     obj.loadPixels();
