@@ -309,7 +309,7 @@ function gameOver(){
     if(titany <= -510){
 	keyFlag = true;
 	image(gameoverImg, 0, 0);
-	text("Enterでゲームに戻る", textx+100, texty+100);
+	text("クリックでゲームに戻る", textx+100, texty+100);
 	titany = -510;
     }
     else{
@@ -400,7 +400,7 @@ function mousePressed() {
 	titany -= 150;
 	keyFlag = true;
     }
-    else if((gameState == 2 || (gameState == 4 || gameState == 5) && keyFlag)){
+    else if((gameState == 2 || gameState == 4 || gameState == 5) && keyFlag){
 	initStatus();
 	gameState = 1;
     }
