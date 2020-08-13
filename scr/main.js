@@ -35,6 +35,8 @@ let nowImg;
 let titanx;
 let titany;
 let nowImgy;
+let nowJumpy;
+let nowTitany;
 
 //Flowing items x coordenate
 let soba_arr = [800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 1000, 800];
@@ -42,6 +44,7 @@ let rock_arr = [1000, 900, 1000, 1300, 1500, 1000, 1400, 1200, 1000, 1300, 1000,
 let s_titan = {
     x     : 130,
     y     : 290,
+    jumpy : 140,
     img   : 0,
     imgx  : 120,
     imgy  : 130,
@@ -51,6 +54,7 @@ let s_titan = {
 let m_titan = {
     x     : 50,
     y     : 130,
+    jumpy : -20,
     img   : 0,
     imgx  : 250,
     imgy  : 300,
@@ -60,6 +64,7 @@ let m_titan = {
 let l_titan = {
     x     : 0,
     y     : -10,
+    jumpy : -160,
     img   : 0,
     imgx  : 350,
     imgy  : 430,
@@ -116,6 +121,8 @@ function setup(){
     titany     = s_titan.y;
     nowImgy    = 0;
     powerUp    = true;
+    nowJumpy   = s_titan.jumpy;
+    nowTitany  = titany;
 
     //objects
     objectsNum = 15;
@@ -166,6 +173,8 @@ function initStatus(){
     nowImg     = s_titan.img;
     titanx     = s_titan.x;
     titany     = s_titan.y;
+    nowJumpy   = s_titan.jumpy;
+    nowTitany  = titany;
     nowImgy    = 0;
     powerUp    = true;
     objectsNum = 15;
@@ -179,12 +188,14 @@ function initStatus(){
     keyFlag    = false;
 }
 
-function setData(img, imgy, x, y){
-    nowImg  = img;
-    nowImgy = imgy;
-    titanx  = x;
-    titany  = y;
-    powerUp = false;
+function setData(img, imgy, x, y, jumpy){
+    nowImg   = img;
+    nowImgy  = imgy;
+    titanx   = x;
+    titany   = y;
+    powerUp  = false;
+    nowJumpy = jumpy;
+    nowTitany = titany;
 }
 
 function imgShow(flag){
@@ -232,10 +243,10 @@ function makingLine(){
     line(800, 250, 780+random(10, 20), 250+random(10, 20));
 }
 
-function controlNowTitan(endingState, levelupScore, nextImg, nextImgy, nextx, nexty){
+function controlNowTitan(endingState, levelupScore, nextImg, nextImgy, nextx, nexty, nextJumpy){
     if(soba_i >= objectsNum) endRun(endingState);
     if(score == levelupScore && powerUp){
-	setData(nextImg, nextImgy, nextx, nexty);
+	setData(nextImg, nextImgy, nextx, nexty, nextJumpy);
     }
 }
 
@@ -271,12 +282,12 @@ function mainGame(){
     //titan size controll
     //small
     if(score <= s_titan.score && nowImg == s_titan.img){
-	controlNowTitan(5, s_titan.score, m_titan.img, m_titan.imgy, m_titan.x, m_titan.y);
+	controlNowTitan(5, s_titan.score, m_titan.img, m_titan.imgy, m_titan.x, m_titan.y, m_titan.jumpy);
     }
 
     //mideum 
     else if(score <= m_titan.score && nowImg == m_titan.img){
-	controlNowTitan(4, m_titan.score, l_titan.img, l_titan.imgy, l_titan.x, l_titan.y);
+	controlNowTitan(4, m_titan.score, l_titan.img, l_titan.imgy, l_titan.x, l_titan.y, l_titan.jumpy);
 	if(score < m_titan.score) powerUp = true;
     }
 
@@ -309,7 +320,7 @@ function gameOver(){
     if(titany <= -510){
 	keyFlag = true;
 	image(gameoverImg, 0, 0);
-	text("クリックでゲームに戻る", textx+100, texty+100);
+	text("クリックでゲームに戻る", textx, texty+100);
 	titany = -510;
     }
     else{
@@ -397,7 +408,7 @@ function openingAnimation(){
 
 function mousePressed() {
     if(gameState == 1) {
-	titany -= 150;
+	titany = nowJumpy;
 	keyFlag = true;
     }
     else if((gameState == 2 || gameState == 4 || gameState == 5) && keyFlag){
@@ -411,7 +422,8 @@ function mousePressed() {
 
 function mouseReleased() {
     if(gameState == 1 && keyFlag){
-	titany += 150;
+	titany = nowTitany;
 	keyFlag = false;
     }
 }
+B

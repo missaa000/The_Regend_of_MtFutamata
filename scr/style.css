@@ -1,5 +1,10 @@
 body{
-    background: #ffffe0;
+    background: #f5deb3;
+    background-blend-mode: lighten;
+    font-family: sans-serif;
+}
+h1{
+    text-align: center;
 }
 p{
     font-size:20px;
