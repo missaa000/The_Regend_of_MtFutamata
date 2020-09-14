@@ -28,6 +28,7 @@ let gameoverImg;
 //timer
 let animationTimer;
 let objspeed;
+let jumpTimer;
 
 //text
 let textx;
@@ -87,7 +88,7 @@ let soba_para = {
 
 let rock_para = {
     x  : 800,
-    y  : 320,
+    y  : 310,
     vx : 10,
     vy : 10
 };
@@ -133,6 +134,7 @@ function setup(){
     powerUp    = true;
     nowJumpy   = s_titan.jumpy;
     nowTitany  = titany;
+    jumpTimer  = 0;
 
     //objects
     objectsNum = 30;
@@ -157,7 +159,6 @@ function setup(){
     angle      = 0;
     alpha      = 0;
 }
-
 
 //main
 function draw(){
@@ -402,7 +403,7 @@ function openingAnimation(){
 
 	else animationTimer = 0;
 
-	text("ダイタンボウという\n巨人がいました", textx, texty);
+	text("ダイタンボウという\n大男がいました", textx, texty);
     }
 
     if(textState == 2){
@@ -415,7 +416,7 @@ function openingAnimation(){
     if(textState == 3){
 	background(255, 255, 255);
 	strokeWeight(1);
-	text("あ！あれはねぎそばだ！\nねぎそばを食べて力をつけよう！", textx, texty);
+	text("あ！あれはねぎそばだ！\nねぎそばを食べて力をつけよう！\n（クリックでゲームスタート）", textx, texty);
 	image(negisoba, 300, 200 + animationTimer);
 	makingLine();
 	animationTimer += 2;
@@ -430,7 +431,13 @@ function openingAnimation(){
 
 function mousePressed() {
     if(gameState == 1) {
-	titany = nowJumpy;
+	jumpTimer = millis();
+	if(jumpTimer >= 5000){
+	    titany = nowTitany;
+	}
+	else{
+	    titany = nowJumpy;
+	}
 	keyFlag = true;
     }
     else if((gameState == 2 || gameState == 4 || gameState == 5) && keyFlag){
