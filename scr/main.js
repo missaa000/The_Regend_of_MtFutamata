@@ -25,6 +25,7 @@ let gameoverImg;
 
 //timer
 let animationTimer;
+let objspeed;
 
 //text
 let textx;
@@ -39,8 +40,8 @@ let nowJumpy;
 let nowTitany;
 
 //Flowing items x coordenate
-let soba_arr = [800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 1000, 800];
-let rock_arr = [1000, 900, 1000, 1300, 1500, 1000, 1400, 1200, 1000, 1300, 1000, 1400, 1200, 1000, 1300, 100, 0]
+let soba_arr   = [800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 1000, 800, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 1000, 800];
+let rock_arr   = [1000, 900, 1000, 1300, 1500, 1000, 1400, 1200, 1000, 1300, 1000, 1400, 1200, 1000, 1300, 100, 1000, 900, 1000, 1300, 1500, 1000, 1400, 1200, 1000, 1300, 1000, 1400, 1200, 1000, 1300, 1000, ];
 let s_titan = {
     x     : 130,
     y     : 290,
@@ -49,6 +50,7 @@ let s_titan = {
     imgx  : 120,
     imgy  : 130,
     score : 80,
+    speed : 10
 };
 
 let m_titan = {
@@ -58,7 +60,8 @@ let m_titan = {
     img   : 0,
     imgx  : 250,
     imgy  : 300,
-    score : 120,
+    score : 180,
+    speed : 15
 };
 
 let l_titan = {
@@ -68,7 +71,8 @@ let l_titan = {
     img   : 0,
     imgx  : 350,
     imgy  : 430,
-    score : 150,
+    score : 300,
+    speed : 20
 };
 
 let soba_para = {
@@ -125,9 +129,10 @@ function setup(){
     nowTitany  = titany;
 
     //objects
-    objectsNum = 15;
+    objectsNum = 30;
     soba_i     = 0;
     rock_i     = 0;
+    objspeed   = s_titan.speed;
     
     //details
     gameState  = 6;
@@ -135,7 +140,7 @@ function setup(){
     keyFlag    = false;
 
     //text
-    textx      = 450;
+    textx      = 430;
     texty      = 200;
     textState  = 0;
 
@@ -175,11 +180,12 @@ function initStatus(){
     titany     = s_titan.y;
     nowJumpy   = s_titan.jumpy;
     nowTitany  = titany;
+    objspeed   = s_titan.speed;
     nowImgy    = 0;
     powerUp    = true;
-    objectsNum = 15;
-    soba_arr   = [800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 1000, 800];
-    rock_arr   = [1000, 900, 1000, 1300, 1500, 1000, 1400, 1200, 1000, 1300, 1000, 1400, 1200, 1000, 1300, 100, 0];
+    objectsNum = 30;
+    soba_arr   = [800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 1000, 800, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 1000, 800];
+    rock_arr   = [1000, 900, 1000, 1300, 1500, 1000, 1400, 1200, 1000, 1300, 1000, 1400, 1200, 1000, 1300, 100, 1000, 900, 1000, 1300, 1500, 1000, 1400, 1200, 1000, 1300, 1000, 1400, 1200, 1000, 1300, 1000, ];
     soba_i     = 0;
     rock_i     = 0;
     score      = 0;
@@ -188,7 +194,7 @@ function initStatus(){
     keyFlag    = false;
 }
 
-function setData(img, imgy, x, y, jumpy){
+function setData(img, imgy, x, y, jumpy, speed){
     nowImg   = img;
     nowImgy  = imgy;
     titanx   = x;
@@ -196,6 +202,8 @@ function setData(img, imgy, x, y, jumpy){
     powerUp  = false;
     nowJumpy = jumpy;
     nowTitany = titany;
+    objspeed = speed;
+    animationTimer = 0;
 }
 
 function imgShow(flag){
@@ -243,10 +251,9 @@ function makingLine(){
     line(800, 250, 780+random(10, 20), 250+random(10, 20));
 }
 
-function controlNowTitan(endingState, levelupScore, nextImg, nextImgy, nextx, nexty, nextJumpy){
-    if(soba_i >= objectsNum) endRun(endingState);
+function controlNowTitan(levelupScore, nextImg, nextImgy, nextx, nexty, nextJumpy, nextspeed){
     if(score == levelupScore && powerUp){
-	setData(nextImg, nextImgy, nextx, nexty, nextJumpy);
+	setData(nextImg, nextImgy, nextx, nexty, nextJumpy, nextspeed);
     }
 }
 
@@ -282,13 +289,15 @@ function mainGame(){
     //titan size controll
     //small
     if(score <= s_titan.score && nowImg == s_titan.img){
-	controlNowTitan(5, s_titan.score, m_titan.img, m_titan.imgy, m_titan.x, m_titan.y, m_titan.jumpy);
+	controlNowTitan(s_titan.score, m_titan.img, m_titan.imgy, m_titan.x, m_titan.y, m_titan.jumpy, m_titan.speed);
+	if(soba_i >= objectsNum) endRun(5);
     }
-
+    
     //mideum 
     else if(score <= m_titan.score && nowImg == m_titan.img){
-	controlNowTitan(4, m_titan.score, l_titan.img, l_titan.imgy, l_titan.x, l_titan.y, l_titan.jumpy);
+	controlNowTitan(m_titan.score, l_titan.img, l_titan.imgy, l_titan.x, l_titan.y, l_titan.jumpy, l_titan.speed);
 	if(score < m_titan.score) powerUp = true;
+	if(soba_i >= objectsNum) endRun(4);
     }
 
     //large
@@ -304,8 +313,8 @@ function mainGame(){
     }
 
     //moving objects
-    soba_arr[soba_i] -= 10;
-    rock_arr[rock_i] -= 10;
+    soba_arr[soba_i] -= objspeed;
+    rock_arr[rock_i] -= objspeed;
     if(soba_arr[soba_i] < -30) soba_i++;
     if(rock_arr[rock_i] < -30) rock_i++;
 
@@ -426,4 +435,3 @@ function mouseReleased() {
 	keyFlag = false;
     }
 }
-B
