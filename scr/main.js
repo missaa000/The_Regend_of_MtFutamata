@@ -293,7 +293,7 @@ function endingAnimation(endingImg, insertImg, happyEndFlag){
 //1
 function mainGame(){
     imgShow("nomal");
-    
+
     //titan size controll
     //small
     if(score <= s_titan.score && nowImg == s_titan.img){
