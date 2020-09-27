@@ -16,8 +16,6 @@ let obj;
 let gnd;
 let negisoba;
 let rock;
-let hogen;
-let sainokami;
 let happyImg;
 let makingImg;
 let trueImg;
@@ -41,8 +39,6 @@ let titany;
 let nowImgy;
 let nowJumpy;
 let nowTitany;
-let obstacle;
-let nowObs;
 
 //Flowing items x coordenate
 let soba_arr   = [800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 1000, 800, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 1000, 800];
@@ -97,8 +93,6 @@ let rock_para = {
 function preload(){
     obj         = loadImage('../image/objects.png');
     gnd         = loadImage('../image/ground.png');
-    hougen      = loadImage('../image/hougen.png');
-    sainokami   = loadImage('../image/sainokami.png');
     happyImg    = loadImage('../image/happyend.png');
     makingImg   = loadImage('../image/making.png');
     trueImg     = loadImage('../image/trueend.png');
@@ -141,8 +135,6 @@ function setup(){
     soba_i     = 0;
     rock_i     = 0;
     objspeed   = s_titan.speed;
-    obstacle   = [rock, sainokami, hougen];
-    nowObs     = rock;
     
     //details
     gameState  = 6;
@@ -220,7 +212,7 @@ function imgShow(flag){
     image(gnd, animationTimer, 0);
     image(gnd, 800 + animationTimer, 0)
     image(negisoba, soba_arr[soba_i], soba_para.y);
-    image(nowObs, rock_arr[rock_i], rock_para.y);
+    image(rock, rock_arr[rock_i], rock_para.y);
     translate(titanx, titany);
     if(flag == "rotate"){
 	rotate(radians(angle));
@@ -324,13 +316,8 @@ function mainGame(){
     //moving objects
     soba_arr[soba_i] -= objspeed;
     rock_arr[rock_i] -= objspeed;
-    if(soba_arr[soba_i] < -30){
-	soba_i++;
-    }
-    if(rock_arr[rock_i] < -30){
-	rock_i++;
-	nowObs = random(obstacle);
-    }
+    if(soba_arr[soba_i] < -30) soba_i++;
+    if(rock_arr[rock_i] < -30) rock_i++;
 
     //gameOver
     if(rock_arr[rock_i] == 200 && !mouseIsPressed){
