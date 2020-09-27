@@ -16,6 +16,8 @@ let obj;
 let gnd;
 let negisoba;
 let rock;
+let hogen;
+let sainokami;
 let happyImg;
 let makingImg;
 let trueImg;
@@ -26,7 +28,6 @@ let gameoverImg;
 //timer
 let animationTimer;
 let objspeed;
-let jumpTimer;
 
 //text
 let textx;
@@ -39,6 +40,8 @@ let titany;
 let nowImgy;
 let nowJumpy;
 let nowTitany;
+let obstacle;
+let nowObs;
 
 //Flowing items x coordenate
 let soba_arr   = [800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 1000, 800, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 800, 900, 1000, 800, 1200, 1000, 800];
@@ -84,7 +87,7 @@ let soba_para = {
 
 let rock_para = {
     x  : 800,
-    y  : 310,
+    y  : 320,
     vx : 10,
     vy : 10
 };
@@ -93,6 +96,8 @@ let rock_para = {
 function preload(){
     obj         = loadImage('../image/objects.png');
     gnd         = loadImage('../image/ground.png');
+    hougen      = loadImage('../image/hougen.png');
+    sainokami   = loadImage('../image/sainokami.png');
     happyImg    = loadImage('../image/happyend.png');
     makingImg   = loadImage('../image/making.png');
     trueImg     = loadImage('../image/trueend.png');
@@ -128,14 +133,15 @@ function setup(){
     powerUp    = true;
     nowJumpy   = s_titan.jumpy;
     nowTitany  = titany;
-    jumpTimer  = 0;
 
     //objects
     objectsNum = 30;
     soba_i     = 0;
     rock_i     = 0;
     objspeed   = s_titan.speed;
-    
+    obstacle   = [rock, sainokami, hougen];
+    nowObs     = rock;
+
     //details
     gameState  = 6;
     score      = 0;
@@ -151,6 +157,7 @@ function setup(){
     angle      = 0;
     alpha      = 0;
 }
+
 
 //main
 function draw(){
@@ -212,7 +219,7 @@ function imgShow(flag){
     image(gnd, animationTimer, 0);
     image(gnd, 800 + animationTimer, 0)
     image(negisoba, soba_arr[soba_i], soba_para.y);
-    image(rock, rock_arr[rock_i], rock_para.y);
+    image(nowObs, rock_arr[rock_i], rock_para.y);
     translate(titanx, titany);
     if(flag == "rotate"){
 	rotate(radians(angle));
@@ -316,8 +323,13 @@ function mainGame(){
     //moving objects
     soba_arr[soba_i] -= objspeed;
     rock_arr[rock_i] -= objspeed;
-    if(soba_arr[soba_i] < -30) soba_i++;
-    if(rock_arr[rock_i] < -30) rock_i++;
+    if(soba_arr[soba_i] < -30){
+	soba_i++;
+    }
+    if(rock_arr[rock_i] < -30){
+	rock_i++;
+	nowObs = random(obstacle);
+    }
 
     //gameOver
     if(rock_arr[rock_i] == 200 && !mouseIsPressed){
@@ -390,7 +402,7 @@ function openingAnimation(){
 
 	else animationTimer = 0;
 
-	text("ダイタンボウという\n大男がいました", textx, texty);
+	text("ダイタンボウという\n巨人がいました", textx, texty);
     }
 
     if(textState == 2){
@@ -403,7 +415,7 @@ function openingAnimation(){
     if(textState == 3){
 	background(255, 255, 255);
 	strokeWeight(1);
-	text("あ！あれはねぎそばだ！\nねぎそばを食べて力をつけよう！\n（クリックでゲームスタート）", textx, texty);
+	text("あ！あれはねぎそばだ！\nねぎそばを食べて力をつけよう！", textx, texty);
 	image(negisoba, 300, 200 + animationTimer);
 	makingLine();
 	animationTimer += 2;
@@ -418,13 +430,7 @@ function openingAnimation(){
 
 function mousePressed() {
     if(gameState == 1) {
-	jumpTimer = millis();
-	if(jumpTimer >= 5000){
-	    titany = nowTitany;
-	}
-	else{
-	    titany = nowJumpy;
-	}
+	titany = nowJumpy;
 	keyFlag = true;
     }
     else if((gameState == 2 || gameState == 4 || gameState == 5) && keyFlag){
